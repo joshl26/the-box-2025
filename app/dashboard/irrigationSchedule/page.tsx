@@ -4,6 +4,8 @@ export default function IrrigationSchedule() {
     <div>
       <h2>Irrigation Schedule</h2>
       <p>Manage your grows irrigation schedule here.</p>
+
+      
     </div>
   );
 }

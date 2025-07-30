@@ -45,6 +45,11 @@ export default function DashboardPage() {
         {/* The content for the active tab will be rendered by Next.js based on the URL */}
         {/* You can add a fallback or default content here if needed */}
         {pathname === "/dashboard" && <p>Select a tab to view content.</p>}
+
+        <video width="full" height="auto" controls autoPlay loop preload="none">
+          <source src="video.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
       </div>
     </div>
   );

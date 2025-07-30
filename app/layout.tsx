@@ -1,6 +1,5 @@
 "use client";
 
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -15,6 +14,8 @@ interface Tab {
 
 const tabs: Tab[] = [
   { id: "dashboard", label: "Dashboard", href: "/dashboard" },
+  { id: "grows", label: "Grows", href: "/dashboard/grows" },
+
   {
     id: "irrigationSchedule",
     label: "Irrigation Schedule",
@@ -24,6 +25,11 @@ const tabs: Tab[] = [
     id: "profileSettings",
     label: "Profile Settings",
     href: "/dashboard/profileSettings",
+  },
+  {
+    id: "logout",
+    label: "Logout",
+    href: "/",
   },
 ];
 
@@ -53,7 +59,7 @@ export default function RootLayout({
       {pathname === "/" ? (
         ""
       ) : (
-        <nav className="flex space-x-4 border-b">
+        <nav className="flex space-x-4 border-b pb-6 mb-4">
           {tabs.map((tab) => (
             <Link key={tab.id} href={tab.href}>
               <span
