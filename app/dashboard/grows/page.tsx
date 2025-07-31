@@ -21,9 +21,7 @@ export default function HomePage() {
 
   const fetchGrows = async () => {
     const res = await fetch("/api/grows");
-
     const data: Grow[] = await res.json();
-    console.log(data);
     setGrows(data);
   };
 

@@ -1,5 +1,5 @@
 // app/page.tsx
-import { updateRecord } from "@/app/actions";
+import { updateRecord, fetchGrows } from "@/app/actions";
 
 interface PartialUpdateData {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -7,6 +7,9 @@ interface PartialUpdateData {
 }
 
 export default async function HomePage() {
+  const grows = await fetchGrows();
+  //   console.log(grows);
+
   const handleUpdate = async (formData: FormData) => {
     "use server"; // This Server Action is defined inline
 
@@ -27,15 +30,31 @@ export default async function HomePage() {
   };
 
   return (
-    <form action={handleUpdate}>
-      <input type="text" name="Id" placeholder="Record ID" required />
-      <input type="text" name="strain" placeholder="New Strain (optional)" />
-      <input
-        type="text"
-        name="growNotes"
-        placeholder="New GrowNotes (optional)"
-      />
-      <button type="submit">Update Record</button>
-    </form>
+    <ul>
+      {grows.fetchGrows?.map((grow) => (
+        <li key={grow.Id}>
+          {grow.strain} - {grow.growNotes}
+          <form
+            action={handleUpdate}
+            style={{ display: "inline-block", marginLeft: "10px" }}
+          >
+            <input type="hidden" name="Id" value={grow.Id} />
+            <input
+              type="text"
+              name="strain"
+              placeholder="New Strain"
+              defaultValue={grow.strain}
+            />
+            <input
+              type="text"
+              name="growNotes"
+              placeholder="New GrowNotes"
+              defaultValue={grow.growNotes}
+            />
+            <button type="submit">Update</button>
+          </form>
+        </li>
+      ))}
+    </ul>
   );
 }

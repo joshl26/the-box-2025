@@ -9,6 +9,16 @@ interface PartialUpdateData {
   [key: string]: any; // Allows for any key-value pair for partial updates
 }
 
+export async function fetchGrows() {
+  try {
+    const result = await pool.query('SELECT * FROM grows ORDER BY "Id" ASC');
+    return { success: true, fetchGrows: result.rows };
+  } catch (error) {
+    console.error("Error fetching grows:", error);
+    return { success: false, error: "Failed to update record." };
+  }
+}
+
 export async function updateRecord(
   Id: string,
   tableName: string,

@@ -1,55 +1,56 @@
-"use client"; // This component will be a Client Component
+// import { usePathname } from "next/navigation";
 
-// import { useState } from "react";
-// import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { fetchGrows } from "../actions";
 
-// interface Tab {
-//   id: string;
-//   label: string;
-//   href: string;
-// }
-
-// const tabs: Tab[] = [
-//   { id: "dashboard", label: "Dashboard", href: "/dashboard" },
-//   {
-//     id: "irrigationSchedule",
-//     label: "Irrigation Schedule",
-//     href: "/dashboard/irrigationSchedule",
-//   },
-//   { id: "profile", label: "Profile", href: "/dashboard/profile" },
-// ];
-
-export default function DashboardPage() {
-  const pathname = usePathname();
+export default async function DashboardPage() {
+  // const pathname = usePathname();
+  const grows = await fetchGrows();
 
   return (
     <div>
-      {/* <nav className="flex space-x-4 border-b">
-        {tabs.map((tab) => (
-          <Link key={tab.id} href={tab.href}>
-            <span
-              className={`py-2 px-4 cursor-pointer ${
-                pathname === tab.href
-                  ? "border-b-2 border-blue-500 text-blue-500"
-                  : ""
-              }`}
-            >
-              {tab.label}
-            </span>
-          </Link>
-        ))}
-      </nav> */}
-
-      <div className="mt-4">
+      <div className="mt-4 ">
         {/* The content for the active tab will be rendered by Next.js based on the URL */}
         {/* You can add a fallback or default content here if needed */}
-        {pathname === "/dashboard" && <p>Select a tab to view content.</p>}
-
+        {/* {pathname === "/dashboard" && <p>Select a tab to view content.</p>} */}
         {/* <video width="full" height="auto" controls autoPlay loop preload="none">
           <source src="video.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video> */}
+        <div className=" mx-auto  shadow-md rounded-lg p-4">
+          <h2 className="text-xl font-semibold mb-4">Current Grows</h2>
+          <p>Strain - Grow Note - Currently Selected</p>
+          <ul className="max-h-15 overflow-y-scroll border border-gray-300 rounded-md p-2">
+            {grows.fetchGrows?.map((grow) => (
+              <li
+                className="p-1 border-b border-gray-200 last:border-b-0"
+                key={grow.Id}
+              >
+                <p>
+                  {grow.strain} - {grow.growNotes} - {grow.currentlySelected}
+                </p>
+                {/* <form
+                  // action={handleUpdate}
+                  style={{ display: "inline-block", marginLeft: "10px" }}
+                >
+                  <input type="hidden" name="Id" value={grow.Id} />
+                  <input
+                    type="text"
+                    name="strain"
+                    placeholder="New Strain"
+                    defaultValue={grow.strain}
+                  />
+                  <input
+                    type="text"
+                    name="growNotes"
+                    placeholder="New GrowNotes"
+                    defaultValue={grow.growNotes}
+                  />
+                  <button type="submit">Update</button>
+                </form> */}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
