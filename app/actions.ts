@@ -43,3 +43,19 @@ export async function updateRecord(
     return { success: false, error: "Failed to update record." };
   }
 }
+
+export async function handleMenuAction(action: string, value?: string) {
+  console.log(
+    `Server action executed: ${action}`,
+    value ? `with value: ${value}` : ""
+  );
+
+  // Return response for client-side handling
+  return {
+    success: true,
+    message: `Action "${action}" completed successfully`,
+    timestamp: new Date().toISOString(),
+  };
+
+  // return { success: true, message: `Action ${action} completed` };
+}
