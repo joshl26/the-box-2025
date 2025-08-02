@@ -1,9 +1,10 @@
 // app/dashboard/irrigationSchedule/page.tsx
-import { fetchGrows } from "@/app/actions";
+import { fetchCurrentlySelectedGrow, fetchGrows } from "@/app/actions";
 import RadioButton from "@/app/components/GrowthCycleRadioButton";
 
 export default async function IrrigationSchedule() {
   const grows = await fetchGrows();
+  const currentlySelected = await fetchCurrentlySelectedGrow();
 
   return (
     <div>
@@ -16,7 +17,7 @@ export default async function IrrigationSchedule() {
               key={grow.Id}
             >
               <p>
-                {grow.strain} - {grow.growNotes} - {grow.currentlySelected}
+                {grow.strain} - {grow.grow_notes} - {grow.currently_selected}
               </p>
             </li>
           ))}
@@ -26,6 +27,25 @@ export default async function IrrigationSchedule() {
       <p>Manage your grows irrigation schedule here.</p>
       <div className="p-8 max-w-md mx-auto">
         <RadioButton />
+        <h2>Currently Selected Growth Cycle:</h2>
+        <p>
+          {currentlySelected.fetchCurrentlySelectedGrow.growth_cycle ===
+          "veg_growth"
+            ? "Vegetative Growth"
+            : ""}
+          {currentlySelected.fetchCurrentlySelectedGrow.growth_cycle ===
+          "gen_flower_start"
+            ? "Generative Flower Start"
+            : ""}
+          {currentlySelected.fetchCurrentlySelectedGrow.growth_cycle ===
+          "gen_flower_mid"
+            ? "Generative Flower Middle"
+            : ""}
+          {currentlySelected.fetchCurrentlySelectedGrow.growth_cycle ===
+          "gen_flower_end"
+            ? "Generative Flower End"
+            : ""}
+        </p>
       </div>
     </div>
   );

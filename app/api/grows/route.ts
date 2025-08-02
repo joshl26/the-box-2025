@@ -53,10 +53,10 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const { strain, growNotes } = await req.json();
+    const { strain, grow_notes } = await req.json();
     const result = await pool.query(
       'INSERT INTO grows ("strain", "grow_notes") VALUES ($1, $2) RETURNING *',
-      [strain, growNotes]
+      [strain, grow_notes]
     );
     return NextResponse.json(result.rows[0], { status: 201 });
   } catch (error) {
@@ -107,10 +107,10 @@ export async function PATCH(
 
 export async function PUT(req: Request) {
   try {
-    const { Id, strain, growNotes } = await req.json();
+    const { Id, strain, grow_notes } = await req.json();
     const result = await pool.query(
       'UPDATE grows SET "strain" = $1, "grow_notes" = $2 WHERE "Id" = $3 RETURNING *',
-      [strain, growNotes, Id]
+      [strain, grow_notes, Id]
     );
     if (result.rows.length === 0) {
       return NextResponse.json({ error: "Grow not found" }, { status: 404 });

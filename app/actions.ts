@@ -71,23 +71,3 @@ export async function handleMenuAction(action: string, value?: string) {
 
   // return { success: true, message: `Action ${action} completed` };
 }
-
-export async function updateGrowthCycleColumn(Id?: string, value?: string) {
-  try {
-    const result = await pool.query(
-      `UPDATE grows SET growth_cycle = ${value} WHERE Id = ${Id}`
-    );
-
-    // You can also revalidate paths or redirect here if needed
-    revalidatePath("/your-page");
-
-    return {
-      success: true,
-      message: `Growth cycle switched to "${value}", column updated successfully`,
-      timestamp: new Date().toISOString(),
-      updatedRecord: result.rows[0],
-    };
-  } catch (error) {
-    console.error("Error updating column:", error);
-  }
-}
