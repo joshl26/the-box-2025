@@ -26,7 +26,7 @@ export default async function DashboardPage() {
                 key={grow.Id}
               >
                 <p>
-                  {grow.strain} - {grow.growNotes} - {grow.currentlySelected}
+                  {grow.strain} - {grow.grow_notes} - {grow.currently_selected}
                 </p>
                 {/* <form
                   // action={handleUpdate}

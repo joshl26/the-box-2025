@@ -15,12 +15,14 @@ interface DropdownMenuProps {
   options: DropdownOption[];
   placeholder?: string;
   className?: string;
+  selectedOptionProp?: string;
 }
 
 export default function DropdownMenu({
   options,
   placeholder = "Select an option",
   className = "",
+  selectedOptionProp = "",
 }: DropdownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<DropdownOption | null>(
@@ -38,6 +40,7 @@ export default function DropdownMenu({
       ) {
         setIsOpen(false);
       }
+      // setSelectedOption(selectedOptionProp);
     }
 
     document.addEventListener("mousedown", handleClickOutside);

@@ -55,7 +55,7 @@ export async function POST(req: Request) {
   try {
     const { strain, growNotes } = await req.json();
     const result = await pool.query(
-      'INSERT INTO grows ("strain", "growNotes") VALUES ($1, $2) RETURNING *',
+      'INSERT INTO grows ("strain", "grow_notes") VALUES ($1, $2) RETURNING *',
       [strain, growNotes]
     );
     return NextResponse.json(result.rows[0], { status: 201 });
@@ -70,10 +70,10 @@ export async function POST(req: Request) {
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { Id: string } }
+  { params }: { params: Promise<{ Id: string }> }
 ) {
   try {
-    const { Id } = params;
+    const { Id } = await params;
     const updates = await req.json();
     const fields = Object.keys(updates)
       .map((key, index) => `${key} = $${index + 1}`)
@@ -109,7 +109,7 @@ export async function PUT(req: Request) {
   try {
     const { Id, strain, growNotes } = await req.json();
     const result = await pool.query(
-      'UPDATE grows SET "strain" = $1, "growNotes" = $2 WHERE "Id" = $3 RETURNING *',
+      'UPDATE grows SET "strain" = $1, "grow_notes" = $2 WHERE "Id" = $3 RETURNING *',
       [strain, growNotes, Id]
     );
     if (result.rows.length === 0) {

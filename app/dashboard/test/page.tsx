@@ -1,5 +1,9 @@
 // app/page.tsx
-import { updateRecord, fetchGrows } from "@/app/actions";
+import {
+  updateRecord,
+  fetchGrows,
+  fetchCurrentlySelectedGrow,
+} from "@/app/actions";
 
 interface PartialUpdateData {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -8,7 +12,8 @@ interface PartialUpdateData {
 
 export default async function HomePage() {
   const grows = await fetchGrows();
-  //   console.log(grows);
+  const selectedGrow = await fetchCurrentlySelectedGrow();
+  console.log(selectedGrow);
 
   const handleUpdate = async (formData: FormData) => {
     "use server"; // This Server Action is defined inline
