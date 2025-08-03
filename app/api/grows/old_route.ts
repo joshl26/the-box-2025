@@ -1,38 +1,38 @@
-// // app/api/grows/route.ts
-// import { NextRequest, NextResponse } from "next/server";
-// import pool from "@/db/db"; // Adjust path if necessary
+// app/api/grows/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import pool from "@/db/db"; // Adjust path if necessary
 
-// // GET all grows
-// export async function GET() {
-//   try {
-//     const { rows } = await pool.query('SELECT * FROM grows ORDER BY "Id" ASC');
-//     return NextResponse.json(rows);
-//   } catch (error) {
-//     console.error("Error fetching grows:", error);
-//     return NextResponse.json(
-//       { error: "Failed to fetch grows" },
-//       { status: 500 }
-//     );
-//   }
-// }
+// GET all grows
+export async function GET() {
+  try {
+    const { rows } = await pool.query('SELECT * FROM grows ORDER BY "Id" ASC');
+    return NextResponse.json(rows);
+  } catch (error) {
+    console.error("Error fetching grows:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch grows" },
+      { status: 500 }
+    );
+  }
+}
 
-// // POST (Create) a new item
-// export async function POST(req: NextRequest) {
-//   try {
-//     const { growNotes } = await req.json();
-//     const { rows } = await pool.query(
-//       "INSERT INTO grows (growNotes) VALUES ($1) RETURNING *",
-//       [growNotes]
-//     );
-//     return NextResponse.json(rows[0], { status: 201 });
-//   } catch (error) {
-//     console.error("Error creating item:", error);
-//     return NextResponse.json(
-//       { error: "Failed to create item" },
-//       { status: 500 }
-//     );
-//   }
-// }
+// POST (Create) a new item
+export async function POST(req: NextRequest) {
+  try {
+    const { growNotes } = await req.json();
+    const { rows } = await pool.query(
+      "INSERT INTO grows (growNotes) VALUES ($1) RETURNING *",
+      [growNotes]
+    );
+    return NextResponse.json(rows[0], { status: 201 });
+  } catch (error) {
+    console.error("Error creating item:", error);
+    return NextResponse.json(
+      { error: "Failed to create item" },
+      { status: 500 }
+    );
+  }
+}
 
 // app/api/grows/route.ts
 // import { NextResponse } from "next/server";
