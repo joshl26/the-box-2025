@@ -3,6 +3,7 @@
 
 import pool from "@/db/db";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 interface PartialUpdateData {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -108,4 +109,79 @@ export async function updateValueAction(id: string, value: number) {
   //   throw new Error("Failed to update value in database");
   // }
   revalidatePath("/dashboard/irrigationSchdule");
+}
+
+export async function createGrow(formData: FormData) {
+  try {
+    const strain = formData.get("strain") as string;
+    const grow_notes = formData.get("grow_notes") as string;
+
+    if (!strain || !grow_notes) {
+      return { success: false, error: "Strain and grow notes are required." };
+    }
+
+    const result = await pool.query(
+      'INSERT INTO grows ("strain", "grow_notes") VALUES ($1, $2) RETURNING *',
+      [strain, grow_notes]
+    );
+
+    revalidatePath("/dashboard/newGrow");
+    return { success: true, grow: result.rows[0] };
+  } catch (error) {
+    console.error("Error creating grow:", error);
+    return { success: false, error: "Failed to create grow." };
+  }
+}
+
+export async function deleteGrow(formData: FormData) {
+  try {
+    const Id = formData.get("Id") as string;
+
+    if (!Id) {
+      return { success: false, error: "Grow ID is required." };
+    }
+
+    const result = await pool.query(
+      'DELETE FROM grows WHERE "Id" = $1 RETURNING *',
+      [Id]
+    );
+
+    if (result.rows.length === 0) {
+      return { success: false, error: "Grow not found." };
+    }
+
+    revalidatePath("/dashboard/newGrow");
+    return { success: true, message: "Grow deleted successfully" };
+  } catch (error) {
+    console.error("Error deleting grow:", error);
+    return { success: false, error: "Failed to delete grow." };
+  }
+}
+
+export async function updateGrow(formData: FormData) {
+  try {
+    const Id = formData.get("Id") as string;
+    const strain = formData.get("strain") as string;
+    const grow_notes = formData.get("grow_notes") as string;
+
+    if (!Id) {
+      return { success: false, error: "Grow ID is required." };
+    }
+
+    const dataToUpdate: PartialUpdateData = {};
+    if (strain) dataToUpdate.strain = strain;
+    if (grow_notes) dataToUpdate.grow_notes = grow_notes;
+
+    const result = await updateRecord(Id, "grows", dataToUpdate);
+
+    if (result.success) {
+      revalidatePath("/dashboard/newGrow");
+      return { success: true, grow: result.updatedRecord };
+    } else {
+      return result;
+    }
+  } catch (error) {
+    console.error("Error updating grow:", error);
+    return { success: false, error: "Failed to update grow." };
+  }
 }

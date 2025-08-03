@@ -15,6 +15,8 @@ interface Tab {
 
 const tabs: Tab[] = [
   { id: "dashboard", label: "Dashboard", href: "/dashboard" },
+  { id: "newGrow", label: "New Grow", href: "/dashboard/newGrow" },
+
   { id: "editGrow", label: "Edit Grow", href: "/dashboard/editGrow" },
 
   {
