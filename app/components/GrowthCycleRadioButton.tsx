@@ -64,12 +64,12 @@ export default async function GrowthCycleRadioButton() {
           type="radio"
           id="option3"
           name="myRadioGroup"
-          value="gen_flower_mid"
+          value="veg_flower_mid"
           defaultChecked={
-            selectedGrowthCycle === "gen_flower_mid" ? true : false
+            selectedGrowthCycle === "veg_flower_mid" ? true : false
           }
         />
-        <label htmlFor="option3">Generative Flower Middle</label>
+        <label htmlFor="option3">Vegetative Flower Middle</label>
       </div>
       <div>
         <input

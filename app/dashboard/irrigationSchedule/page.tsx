@@ -1,6 +1,7 @@
 // app/dashboard/irrigationSchedule/page.tsx
 import { fetchCurrentlySelectedGrow, fetchGrows } from "@/app/actions";
 import RadioButton from "@/app/components/GrowthCycleRadioButton";
+import Image from "next/image";
 
 export default async function IrrigationSchedule() {
   const grows = await fetchGrows();
@@ -25,27 +26,75 @@ export default async function IrrigationSchedule() {
       </div>
       <h2>Irrigation Schedule</h2>
       <p>Manage your grows irrigation schedule here.</p>
-      <div className="p-8 max-w-md mx-auto">
-        <RadioButton />
-        <h2>Currently Selected Growth Cycle:</h2>
-        <p>
+      <div className="flex flex-row">
+        <div className="p-8 max-w-md flex-col">
+          <RadioButton />
+          <h2>Currently Selected Growth Cycle:</h2>
+          <p>
+            {currentlySelected.fetchCurrentlySelectedGrow.growth_cycle ===
+            "veg_growth"
+              ? "Vegetative Growth"
+              : ""}
+            {currentlySelected.fetchCurrentlySelectedGrow.growth_cycle ===
+            "gen_flower_start"
+              ? "Generative Flower Start"
+              : ""}
+            {currentlySelected.fetchCurrentlySelectedGrow.growth_cycle ===
+            "gen_flower_mid"
+              ? "Generative Flower Middle"
+              : ""}
+            {currentlySelected.fetchCurrentlySelectedGrow.growth_cycle ===
+            "gen_flower_end"
+              ? "Generative Flower End"
+              : ""}
+          </p>
+        </div>
+        <div className="flex-col">
           {currentlySelected.fetchCurrentlySelectedGrow.growth_cycle ===
-          "veg_growth"
-            ? "Vegetative Growth"
-            : ""}
+          "veg_growth" ? (
+            <Image
+              src="/vegetative_growth.png"
+              alt=""
+              width={500}
+              height={100}
+            />
+          ) : (
+            ""
+          )}
           {currentlySelected.fetchCurrentlySelectedGrow.growth_cycle ===
-          "gen_flower_start"
-            ? "Generative Flower Start"
-            : ""}
+          "gen_flower_start" ? (
+            <Image
+              src="/generative_flower_start.png"
+              alt=""
+              width={500}
+              height={100}
+            />
+          ) : (
+            ""
+          )}
           {currentlySelected.fetchCurrentlySelectedGrow.growth_cycle ===
-          "gen_flower_mid"
-            ? "Generative Flower Middle"
-            : ""}
+          "veg_flower_mid" ? (
+            <Image
+              src="/vegetative_flower_mid.png"
+              alt=""
+              width={500}
+              height={100}
+            />
+          ) : (
+            ""
+          )}
           {currentlySelected.fetchCurrentlySelectedGrow.growth_cycle ===
-          "gen_flower_end"
-            ? "Generative Flower End"
-            : ""}
-        </p>
+          "gen_flower_end" ? (
+            <Image
+              src="/generative_flower_end.png"
+              alt=""
+              width={500}
+              height={100}
+            />
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </div>
   );
