@@ -9,7 +9,7 @@ interface Grow {
   growNotes: string;
 }
 
-export default function HomePage() {
+export default function Grows() {
   const [grows, setGrows] = useState<Grow[]>([]);
   const [newGrowStrain, setNewGrowStrain] = useState("");
   const [newGrowGrowNotes, setNewGrowGrowNotes] = useState("");
@@ -62,7 +62,6 @@ export default function HomePage() {
   return (
     <div>
       <h1>Grows</h1>
-
       {/* Create Form */}
       <div>
         <input
