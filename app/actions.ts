@@ -71,3 +71,41 @@ export async function handleMenuAction(action: string, value?: string) {
 
   // return { success: true, message: `Action ${action} completed` };
 }
+
+export async function updateValueAction(id: string, value: number) {
+  console.log(id, value);
+
+  // try {
+  //   const client = await pool.connect();
+  //   try {
+  //     // Update the value in the database
+  //     // Adjust the table name and column names as needed
+  //     const query = `
+  //       UPDATE number_inputs
+  //       SET value = $1, updated_at = NOW()
+  //       WHERE id = $2
+  //     `;
+  //     const result = await client.query(query, [value, id]);
+  //     if (result.rowCount === 0) {
+  //       // If no rows were updated, create a new record
+  //       const insertQuery = `
+  //         INSERT INTO number_inputs (id, value, created_at, updated_at)
+  //         VALUES ($1, $2, NOW(), NOW())
+  //         ON CONFLICT (id) DO UPDATE SET
+  //           value = EXCLUDED.value,
+  //           updated_at = EXCLUDED.updated_at
+  //       `;
+  //       await client.query(insertQuery, [id, value]);
+  //     }
+  //     // Revalidate the current path to refresh any cached data
+  //
+  //     return { success: true };
+  //   } finally {
+  //     client.release();
+  //   }
+  // } catch (error) {
+  //   console.error("Database error:", error);
+  //   throw new Error("Failed to update value in database");
+  // }
+  revalidatePath("/dashboard/irrigationSchdule");
+}

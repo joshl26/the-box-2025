@@ -1,6 +1,7 @@
 // app/dashboard/irrigationSchedule/page.tsx
 import { fetchCurrentlySelectedGrow, fetchGrows } from "@/app/actions";
 import RadioButton from "@/app/components/GrowthCycleRadioButton";
+import NumberInput from "@/app/components/NumberInput";
 import Image from "next/image";
 
 export default async function IrrigationSchedule() {
@@ -94,6 +95,33 @@ export default async function IrrigationSchedule() {
           ) : (
             ""
           )}
+        </div>
+        <div>
+          <h2>P1</h2>
+          <h3>Number of Shots</h3>
+          <NumberInput id="p1" initialValue={0} min={0} max={1000} step={1} />
+          <h3>Time Between Shots</h3>
+          <NumberInput id="p1" initialValue={0} min={0} max={1000} step={1} />
+          <h3>Size of Shots</h3>
+          <NumberInput id="p1" initialValue={0} min={0} max={1000} step={1} />
+        </div>
+        <div>
+          <h2>P2</h2>
+          <h3>Number of Shots</h3>
+          <NumberInput id="p1" initialValue={0} min={0} max={1000} step={1} />
+          <h3>Time Between Shots</h3>
+          <NumberInput id="p1" initialValue={0} min={0} max={1000} step={1} />
+          <h3>Size of Shots</h3>
+          <NumberInput id="p1" initialValue={0} min={0} max={1000} step={1} />
+        </div>
+        <div>
+          <h2>P3</h2>
+          <h3>Number of Shots</h3>
+          <NumberInput id="p1" initialValue={0} min={0} max={1000} step={1} />
+          <h3>Time Between Shots</h3>
+          <NumberInput id="p1" initialValue={0} min={0} max={1000} step={1} />
+          <h3>Size of Shots</h3>
+          <NumberInput id="p1" initialValue={0} min={0} max={1000} step={1} />
         </div>
       </div>
     </div>
