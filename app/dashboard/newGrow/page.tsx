@@ -83,7 +83,7 @@ export default async function NewGrowPage() {
       </div>
 
       {/* Grow List */}
-      <div className="bg-white shadow-md rounded-lg p-6">
+      <div className=" shadow-md rounded-lg p-6">
         <h2 className="text-xl font-semibold mb-4">Current Grows</h2>
 
         {grows.success && grows.fetchGrows && grows.fetchGrows.length > 0 ? (

@@ -71,8 +71,8 @@ export default async function LightingScheduleForm() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
-      <h2 className="text-2xl font-semibold mb-6 text-gray-900">
+    <div className="max-w-2xl mx-auto  shadow-md rounded-lg p-6">
+      <h2 className="text-2xl font-semibold mb-6 ">
         Lighting Schedule - {grow.strain}
       </h2>
 
@@ -90,7 +90,7 @@ export default async function LightingScheduleForm() {
             <div>
               <label
                 htmlFor="sunrise_time_veg"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-sm font-medium text-black mb-2"
               >
                 Sunrise Time (Lights On)
               </label>
@@ -99,9 +99,9 @@ export default async function LightingScheduleForm() {
                 id="sunrise_time_veg"
                 name="sunrise_time_veg"
                 defaultValue={minutesToTime(grow.sunrise_time_veg || 420)} // Default 7:00 AM
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-black"
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-black mt-1">
                 Current: {minutesToTime(grow.sunrise_time_veg || 420)}
               </p>
             </div>
@@ -109,7 +109,7 @@ export default async function LightingScheduleForm() {
             <div>
               <label
                 htmlFor="sunset_time_veg"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-sm font-medium text-black mb-2"
               >
                 Sunset Time (Lights Off)
               </label>
@@ -118,9 +118,9 @@ export default async function LightingScheduleForm() {
                 id="sunset_time_veg"
                 name="sunset_time_veg"
                 defaultValue={minutesToTime(grow.sunset_time_veg || 1380)} // Default 11:00 PM
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-black mt-1">
                 Current: {minutesToTime(grow.sunset_time_veg || 1380)}
               </p>
             </div>
@@ -154,7 +154,7 @@ export default async function LightingScheduleForm() {
                 id="sunrise_time_flower"
                 name="sunrise_time_flower"
                 defaultValue={minutesToTime(grow.sunrise_time_flower || 420)} // Default 7:00 AM
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-3 py-2 text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               />
               <p className="text-xs text-gray-500 mt-1">
                 Current: {minutesToTime(grow.sunrise_time_flower || 420)}
@@ -173,7 +173,7 @@ export default async function LightingScheduleForm() {
                 id="sunset_time_flower"
                 name="sunset_time_flower"
                 defaultValue={minutesToTime(grow.sunset_time_flower || 1140)} // Default 7:00 PM
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               />
               <p className="text-xs text-gray-500 mt-1">
                 Current: {minutesToTime(grow.sunset_time_flower || 1140)}

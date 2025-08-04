@@ -43,7 +43,7 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
+    <div className="max-w-md mx-auto  shadow-md rounded-lg p-6">
       <h2 className="text-xl font-semibold mb-4">Edit Grow Details</h2>
 
       <form action={handleUpdate} className="space-y-4">
@@ -51,10 +51,7 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
 
         {/* Strain Input */}
         <div>
-          <label
-            htmlFor="strain"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
+          <label htmlFor="strain" className="block text-sm font-medium  mb-1">
             Strain
           </label>
           <input
@@ -71,7 +68,7 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
         <div>
           <label
             htmlFor="grow_notes"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium  mb-1"
           >
             Grow Notes
           </label>
@@ -89,7 +86,7 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
         <div>
           <label
             htmlFor="currently_selected"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium mb-1"
           >
             Currently Selected
           </label>
