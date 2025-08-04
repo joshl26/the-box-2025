@@ -25,6 +25,12 @@ const tabs: Tab[] = [
     href: "/dashboard/irrigationSchedule",
   },
   {
+    id: "lightingSchedule",
+    label: "Lighting Schedule",
+    href: "/dashboard/lightingSchedule",
+  },
+
+  {
     id: "profileSettings",
     label: "Profile Settings",
     href: "/dashboard/profileSettings",
