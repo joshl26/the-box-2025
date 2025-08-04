@@ -10,19 +10,19 @@ export default async function DashboardPage() {
       <div className="mt-4">
         <div className="mx-auto shadow-md rounded-lg p-4">
           <h2 className="text-xl font-semibold mb-4">Current Grows</h2>
-          <p className="text-sm text-gray-600 mb-3">
+          <p className="text-sm  mb-3">
             Click on a grow to make it active • Active grows are highlighted in
             blue
           </p>
 
           {grows.success && grows.fetchGrows && grows.fetchGrows.length > 0 ? (
-            <div className="max-h-35 overflow-y-scroll border border-gray-300 rounded-md">
+            <div className="max-h-35 overflow-y-scroll border border-gray-300 rounded-md ">
               {grows.fetchGrows.map((grow) => (
                 <SelectableGrowItem key={grow.Id} grow={grow} />
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-gray-500">
+            <div className="text-center py-8 text-gray-500 dark:text-white">
               <p>No grows found.</p>
               <p className="text-sm mt-2">
                 <a
@@ -50,18 +50,18 @@ function SelectableGrowItem({ grow }: { grow: any }) {
   const isActive = grow.currently_selected === "true";
 
   return (
-    <form action={setActiveGrow} className="w-full">
+    <form action={setActiveGrow} className="w-full ">
       <input type="hidden" name="growId" value={grow.Id} />
       <button
         type="submit"
-        className={`w-full text-left p-3 border-b border-gray-200 last:border-b-0 transition-all duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset ${
+        className={`w-full text-left p-3 border-b border-gray-200 last:border-b-0 transition-all duration-200  hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset ${
           isActive
             ? "bg-blue-50 border-l-4 border-l-blue-500 shadow-sm"
             : "hover:border-l-4 hover:border-l-gray-300"
         }`}
       >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+        <div className="flex items-center justify-between ">
+          <div className="flex items-center space-x-3 ">
             {/* Status indicator dot */}
             <div
               className={`w-3 h-3 rounded-full flex-shrink-0 ${
@@ -69,17 +69,17 @@ function SelectableGrowItem({ grow }: { grow: any }) {
               }`}
             ></div>
 
-            <div className="min-w-0 flex-1">
+            <div className="min-w-0 flex-1 ">
               <h3
                 className={`font-medium truncate ${
-                  isActive ? "text-blue-900" : "text-gray-900"
+                  isActive ? "text-blue-900" : "text-white"
                 }`}
               >
                 {grow.strain}
               </h3>
               <p
-                className={`text-sm mt-1 truncate ${
-                  isActive ? "text-blue-700" : "text-gray-600"
+                className={`text-sm mt-1 truncate  ${
+                  isActive ? "text-blue-700" : "text-white"
                 }`}
               >
                 {grow.grow_notes}
@@ -87,7 +87,7 @@ function SelectableGrowItem({ grow }: { grow: any }) {
               {grow.growth_cycle && (
                 <p
                   className={`text-xs mt-1 capitalize ${
-                    isActive ? "text-blue-600" : "text-gray-500"
+                    isActive ? "text-blue-600" : "text-white"
                   }`}
                 >
                   Stage: {grow.growth_cycle.replace("_", " ")}
