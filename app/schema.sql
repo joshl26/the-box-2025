@@ -1,8 +1,8 @@
 -- Drop tables if they exist (for clean setup)
-DROP TABLE IF EXISTS grows_test CASCADE;
+DROP TABLE IF EXISTS grows CASCADE;
 
 -- Main grows table
-CREATE TABLE grows_test (
+CREATE TABLE grows (
     "Id" SERIAL PRIMARY KEY,
     strain VARCHAR(255) NOT NULL,
     grow_notes VARCHAR(255),
@@ -53,12 +53,12 @@ CREATE TABLE grows_test (
     breeder_name VARCHAR(255),
     grower_name VARCHAR(255),
     currently_selected VARCHAR(255) DEFAULT false,
-    grow_finished VARCHAR(255) DEFAULT false
-    
+    grow_finished VARCHAR(255) DEFAULT false,
+    growth_cycle VARCHAR(255) DEFAULT 'veg_growth'
 );
 
 -- Insert sample data
-INSERT INTO grows_test 
+INSERT INTO grows 
 (
     "strain", 
     "grow_notes", 
@@ -109,9 +109,10 @@ INSERT INTO grows_test
     "breeder_name",
     "grower_name",
     "currently_selected",
-    "grow_finished"
+    "grow_finished",
+    "growth_cycle"
 ) 
 VALUES
-    ('Blue Dream', 'First hydroponic grow attempt. Using DWC system.', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, '2025-1-1', '2025-1-1', 0, 0,'true', 'false'),
-    ('Northern Lights', 'Second grow with improved nutrient schedule.', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-1-1', '2025-1-1', 0, 0,'false', 'false'),
-    ('White Widow', 'Experimental grow with LED lighting.', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-1-1', '2025-1-1', 0, 0,'false', 'false');
+    ('Blue Dream', 'First hydroponic grow attempt. Using DWC system.', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, '2025-1-1', '2025-1-1', 0, 0,'true', 'false', 'veg_growth'),
+    ('Northern Lights', 'Second grow with improved nutrient schedule.', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-1-1', '2025-1-1', 0, 0,'false', 'false', 'veg_growth'),
+    ('White Widow', 'Experimental grow with LED lighting.', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-1-1', '2025-1-1', 0, 0,'false', 'false', 'veg_growth');
