@@ -185,3 +185,45 @@ export async function updateGrow(formData: FormData) {
     return { success: false, error: "Failed to update grow." };
   }
 }
+
+// Add this to your app/actions.ts file
+
+export async function setActiveGrow(formData: FormData) {
+  "use server";
+
+  try {
+    const newActiveId = formData.get("growId") as string;
+
+    if (!newActiveId) {
+      return { success: false, error: "Grow ID is required." };
+    }
+
+    // First, set all grows to currently_selected = 'false'
+    await pool.query("UPDATE grows SET currently_selected = $1", ["false"]);
+
+    // Then set the selected grow to currently_selected = 'true'
+    const result = await pool.query(
+      'UPDATE grows SET currently_selected = $1 WHERE "Id" = $2 RETURNING *',
+      ["true", newActiveId]
+    );
+
+    if (result.rows.length === 0) {
+      return { success: false, error: "Grow not found." };
+    }
+
+    // Revalidate paths that depend on the currently selected grow
+    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/irrigationSchedule");
+    revalidatePath("/dashboard/editGrow");
+    revalidatePath("/dashboard/lightingSchedule");
+
+    return {
+      success: true,
+      message: "Active grow updated successfully",
+      activeGrow: result.rows[0],
+    };
+  } catch (error) {
+    console.error("Error setting active grow:", error);
+    return { success: false, error: "Failed to set active grow." };
+  }
+}
