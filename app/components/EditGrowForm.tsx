@@ -60,8 +60,6 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
     const grower_name = formData.get("grower_name") as string;
     const grow_finished = formData.get("grow_finished") as string;
 
-    console.log(grow_finished);
-
     const dataToUpdate: PartialUpdateData = {};
 
     if (strain) dataToUpdate.strain = strain;

@@ -46,6 +46,8 @@ export async function updateRecord(
       .map((col, index) => `"${col}" = $${index + 2}`) // $1 for Id, then $2, $3...
       .join(", ");
 
+    console.log("id", id);
+
     const query = `UPDATE ${tableName} SET ${setClause} WHERE "id" = $1 RETURNING *;`;
     const result = await pool.query(query, [id, ...values]);
 

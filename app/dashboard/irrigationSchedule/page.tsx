@@ -1,5 +1,5 @@
 // app/dashboard/irrigationSchedule/page.tsx
-import { fetchCurrentlySelectedGrow, fetchGrows } from "@/app/actions";
+import { fetchCurrentlySelectedGrow } from "@/app/actions";
 import RadioButton from "@/app/components/GrowthCycleRadioButton";
 import NumberInput from "@/app/components/NumberInput";
 import Image from "next/image";

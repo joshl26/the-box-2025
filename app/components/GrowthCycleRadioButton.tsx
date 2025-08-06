@@ -13,12 +13,12 @@ export default async function GrowthCycleRadioButton() {
   const selectedGrowthCycle =
     currentlySelected.fetchCurrentlySelectedGrow.growth_cycle;
 
-  const recordId = currentlySelected.fetchCurrentlySelectedGrow.Id;
+  const recordId = currentlySelected.fetchCurrentlySelectedGrow.id;
 
   const handleUpdate = async (formData: FormData) => {
     "use server"; // This Server Action is defined inline
 
-    const Id = formData.get("recordId") as string;
+    const id = formData.get("recordId") as string;
 
     const growth_cycle = formData.get("myRadioGroup") as string;
 
@@ -26,7 +26,7 @@ export default async function GrowthCycleRadioButton() {
 
     if (growth_cycle) dataToUpdate.growth_cycle = growth_cycle;
 
-    const result = await updateRecord(Id, "grows", dataToUpdate);
+    const result = await updateRecord(id, "grows", dataToUpdate);
     if (result.success) {
       console.log("Record updated successfully:", result.updatedRecord);
     } else {

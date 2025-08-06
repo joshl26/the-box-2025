@@ -28,16 +28,16 @@ export default function NumberInput({
 
     setValue(newValue);
 
-    // // Update database using server action
-    // startTransition(async () => {
-    //   try {
-    //     await updateValueAction(id, newValue);
-    //   } catch (error) {
-    //     console.error("Failed to update value:", error);
-    //     // Optionally revert the value on error
-    //     setValue(value);
-    //   }
-    // });
+    // Update database using server action
+    startTransition(async () => {
+      try {
+        await updateValueAction(id, newValue);
+      } catch (error) {
+        console.error("Failed to update value:", error);
+        // Optionally revert the value on error
+        setValue(value);
+      }
+    });
   };
 
   const increment = () => handleChange(value + step);
