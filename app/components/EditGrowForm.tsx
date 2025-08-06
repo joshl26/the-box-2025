@@ -6,6 +6,17 @@ interface Grow {
   strain: string;
   grow_notes: string;
   currently_selected: string;
+  sunrise_time_veg?: string;
+  sunset_time_veg?: string;
+  sunrise_time_flower?: string;
+  sunset_time_flower?: string;
+  number_of_pots?: number;
+  pot_volume?: number;
+  flower_start_date?: string;
+  flower_end_date?: string;
+  breeder_name?: string;
+  grower_name?: string;
+  grow_finished?: boolean;
 }
 
 interface EditGrowFormProps {
@@ -25,6 +36,19 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
     const strain = formData.get("strain") as string;
     const grow_notes = formData.get("grow_notes") as string;
     const currently_selected = formData.get("currently_selected") as string;
+    const sunrise_time_veg = formData.get("sunrise_time_veg") as string;
+    const sunset_time_veg = formData.get("sunset_time_veg") as string;
+    const sunrise_time_flower = formData.get("sunrise_time_flower") as string;
+    const sunset_time_flower = formData.get("sunset_time_flower") as string;
+    const number_of_pots = formData.get("number_of_pots") as string;
+    const pot_volume = formData.get("pot_volume") as string;
+    const flower_start_date = formData.get("flower_start_date") as string;
+    const flower_end_date = formData.get("flower_end_date") as string;
+    const breeder_name = formData.get("breeder_name") as string;
+    const grower_name = formData.get("grower_name") as string;
+    const grow_finished = formData.get("grow_finished") as string;
+
+    console.log(breeder_name);
 
     const dataToUpdate: PartialUpdateData = {};
 
@@ -32,6 +56,19 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
     if (grow_notes) dataToUpdate.grow_notes = grow_notes;
     if (currently_selected)
       dataToUpdate.currently_selected = currently_selected;
+    if (sunrise_time_veg) dataToUpdate.sunrise_time_veg = sunrise_time_veg;
+    if (sunset_time_veg) dataToUpdate.sunset_time_veg = sunset_time_veg;
+    if (sunrise_time_flower)
+      dataToUpdate.sunrise_time_flower = sunrise_time_flower;
+    if (sunset_time_flower)
+      dataToUpdate.sunset_time_flower = sunset_time_flower;
+    if (number_of_pots) dataToUpdate.number_of_pots = parseInt(number_of_pots);
+    if (pot_volume) dataToUpdate.pot_volume = parseFloat(pot_volume);
+    if (flower_start_date) dataToUpdate.flower_start_date = flower_start_date;
+    if (flower_end_date) dataToUpdate.flower_end_date = flower_end_date;
+    if (breeder_name) dataToUpdate.breeder_name = breeder_name;
+    if (grower_name) dataToUpdate.grower_name = grower_name;
+    if (grow_finished) dataToUpdate.grow_finished = grow_finished === "true";
 
     const result = await updateRecord(id, "grows", dataToUpdate);
 
@@ -43,62 +80,289 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
   };
 
   return (
-    <div className="max-w-md mx-auto  shadow-md rounded-lg p-6">
+    <div className="max-w-2xl mx-auto shadow-md rounded-lg p-6">
       <h2 className="text-xl font-semibold mb-4">Edit Grow Details</h2>
 
       <form action={handleUpdate} className="space-y-4">
         <input type="hidden" name="id" value={grow.id} />
 
-        {/* Strain Input */}
-        <div>
-          <label htmlFor="strain" className="block text-sm font-medium  mb-1">
-            Strain
-          </label>
-          <input
-            type="text"
-            id="strain"
-            name="strain"
-            defaultValue={grow.strain}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Enter strain name"
-          />
+        {/* Basic Information Section */}
+        <div className="border-b pb-4 mb-4">
+          <h3 className="text-lg font-medium mb-3">Basic Information</h3>
+
+          {/* Strain Input */}
+          <div className="mb-4">
+            <label htmlFor="strain" className="block text-sm font-medium mb-1">
+              Strain
+            </label>
+            <input
+              type="text"
+              id="strain"
+              name="strain"
+              defaultValue={grow.strain}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Enter strain name"
+            />
+          </div>
+
+          {/* Grow Notes Input */}
+          <div className="mb-4">
+            <label
+              htmlFor="grow_notes"
+              className="block text-sm font-medium mb-1"
+            >
+              Grow Notes
+            </label>
+            <textarea
+              id="grow_notes"
+              name="grow_notes"
+              defaultValue={grow.grow_notes}
+              rows={3}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
+              placeholder="Enter grow notes"
+            />
+          </div>
+
+          {/* Breeder Name Input */}
+          <div className="mb-4">
+            <label
+              htmlFor="breeder_name"
+              className="block text-sm font-medium mb-1"
+            >
+              Breeder Name
+            </label>
+            <input
+              type="text"
+              id="breeder_name"
+              name="breeder_name"
+              defaultValue={grow.breeder_name || ""}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Enter breeder name"
+            />
+          </div>
+
+          {/* Grower Name Input */}
+          <div className="mb-4">
+            <label
+              htmlFor="grower_name"
+              className="block text-sm font-medium mb-1"
+            >
+              Grower Name
+            </label>
+            <input
+              type="text"
+              id="grower_name"
+              name="grower_name"
+              defaultValue={grow.grower_name || ""}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Enter grower name"
+            />
+          </div>
+
+          {/* Currently Selected Input */}
+          <div>
+            <label
+              htmlFor="currently_selected"
+              className="block text-sm font-medium mb-1"
+            >
+              Currently Selected
+            </label>
+            <select
+              id="currently_selected"
+              name="currently_selected"
+              defaultValue={grow.currently_selected}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+          </div>
         </div>
 
-        {/* Grow Notes Input */}
-        <div>
-          <label
-            htmlFor="grow_notes"
-            className="block text-sm font-medium  mb-1"
-          >
-            Grow Notes
-          </label>
-          <textarea
-            id="grow_notes"
-            name="grow_notes"
-            defaultValue={grow.grow_notes}
-            rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
-            placeholder="Enter grow notes"
-          />
+        {/* Lighting Schedule Section */}
+        <div className="border-b pb-4 mb-4">
+          <h3 className="text-lg font-medium mb-3">Lighting Schedule</h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Vegetative Stage Times */}
+            <div>
+              <h4 className="text-md font-medium mb-2 text-green-600">
+                Vegetative Stage
+              </h4>
+
+              <div className="mb-3">
+                <label
+                  htmlFor="sunrise_time_veg"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Sunrise Time (Veg)
+                </label>
+                <input
+                  type="time"
+                  id="sunrise_time_veg"
+                  name="sunrise_time_veg"
+                  defaultValue={grow.sunrise_time_veg || ""}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="sunset_time_veg"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Sunset Time (Veg)
+                </label>
+                <input
+                  type="time"
+                  id="sunset_time_veg"
+                  name="sunset_time_veg"
+                  defaultValue={grow.sunset_time_veg || ""}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+
+            {/* Flowering Stage Times */}
+            <div>
+              <h4 className="text-md font-medium mb-2 text-purple-600">
+                Flowering Stage
+              </h4>
+
+              <div className="mb-3">
+                <label
+                  htmlFor="sunrise_time_flower"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Sunrise Time (Flower)
+                </label>
+                <input
+                  type="time"
+                  id="sunrise_time_flower"
+                  name="sunrise_time_flower"
+                  defaultValue={grow.sunrise_time_flower || ""}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="sunset_time_flower"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Sunset Time (Flower)
+                </label>
+                <input
+                  type="time"
+                  id="sunset_time_flower"
+                  name="sunset_time_flower"
+                  defaultValue={grow.sunset_time_flower || ""}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Currently Selected Input */}
-        <div>
-          <label
-            htmlFor="currently_selected"
-            className="block text-sm font-medium mb-1"
-          >
-            Currently Selected
-          </label>
-          <select
-            id="currently_selected"
-            name="currently_selected"
-            defaultValue={grow.currently_selected}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-          </select>
+        {/* Setup Configuration Section */}
+        <div className="border-b pb-4 mb-4">
+          <h3 className="text-lg font-medium mb-3">Setup Configuration</h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Number of Pots */}
+            <div>
+              <label
+                htmlFor="number_of_pots"
+                className="block text-sm font-medium mb-1"
+              >
+                Number of Pots
+              </label>
+              <input
+                type="number"
+                id="number_of_pots"
+                name="number_of_pots"
+                defaultValue={grow.number_of_pots || ""}
+                min="1"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="e.g. 4"
+              />
+            </div>
+
+            {/* Pot Volume */}
+            <div>
+              <label
+                htmlFor="pot_volume"
+                className="block text-sm font-medium mb-1"
+              >
+                Pot Volume (Liters)
+              </label>
+              <input
+                type="number"
+                id="pot_volume"
+                name="pot_volume"
+                defaultValue={grow.pot_volume || ""}
+                min="0"
+                step="0.1"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="e.g. 11.5"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Grow Timeline Section */}
+        <div className="border-b pb-4 mb-4">
+          <h3 className="text-lg font-medium mb-3">Grow Timeline</h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Flower Start Date */}
+            <div>
+              <label
+                htmlFor="flower_start_date"
+                className="block text-sm font-medium mb-1"
+              >
+                Flower Start Date
+              </label>
+              <input
+                type="date"
+                id="flower_start_date"
+                name="flower_start_date"
+                defaultValue={grow.flower_start_date || ""}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            {/* Flower End Date */}
+            <div>
+              <label
+                htmlFor="flower_end_date"
+                className="block text-sm font-medium mb-1"
+              >
+                Flower End Date
+              </label>
+              <input
+                type="date"
+                id="flower_end_date"
+                name="flower_end_date"
+                defaultValue={grow.flower_end_date || ""}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+
+          {/* Grow Finished Checkbox */}
+          <div className="mt-4">
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                name="grow_finished"
+                value="true"
+                defaultChecked={grow.grow_finished || false}
+                className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              />
+              <span className="text-sm font-medium">Grow Finished</span>
+            </label>
+          </div>
         </div>
 
         {/* Submit Button */}
