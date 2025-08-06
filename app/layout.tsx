@@ -24,17 +24,17 @@ const tabs: Tab[] = [
     label: "Irrigation Schedule",
     href: "/dashboard/irrigationSchedule",
   },
-  {
-    id: "lightingSchedule",
-    label: "Lighting Schedule",
-    href: "/dashboard/lightingSchedule",
-  },
+  // {
+  //   id: "lightingSchedule",
+  //   label: "Lighting Schedule",
+  //   href: "/dashboard/lightingSchedule",
+  // },
 
-  {
-    id: "profileSettings",
-    label: "Profile Settings",
-    href: "/dashboard/profileSettings",
-  },
+  // {
+  //   id: "profileSettings",
+  //   label: "Profile Settings",
+  //   href: "/dashboard/profileSettings",
+  // },
   {
     id: "logout",
     label: "Logout",

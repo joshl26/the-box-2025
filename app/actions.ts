@@ -173,6 +173,11 @@ export async function updateGrow(formData: FormData) {
     const strain = formData.get("strain") as string;
     const grow_notes = formData.get("grow_notes") as string;
 
+    // Handle checkbox - convert to boolean
+    const grow_finished = formData.get("grow_finished") === ("true" as string);
+
+    console.log(grow_finished);
+
     if (!id) {
       return { success: false, error: "Grow ID is required." };
     }
@@ -181,11 +186,13 @@ export async function updateGrow(formData: FormData) {
     if (strain) dataToUpdate.strain = strain;
     if (grow_notes) dataToUpdate.grow_notes = grow_notes;
 
+    // Always include grow_finished since we want to handle both true and false
+    dataToUpdate.grow_finished = grow_finished;
+
     const result = await updateRecord(id, "grows", dataToUpdate);
 
     if (result.success) {
       redirect("/dashboard");
-      // return { success: true, grow: result.updatedRecord };
     } else {
       return result;
     }

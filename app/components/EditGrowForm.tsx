@@ -12,11 +12,12 @@ interface Grow {
   sunset_time_flower?: string;
   number_of_pots?: number;
   pot_volume?: number;
+  vegetative_start_date?: string;
   flower_start_date?: string;
   flower_end_date?: string;
   breeder_name?: string;
   grower_name?: string;
-  grow_finished?: boolean;
+  grow_finished?: string;
 }
 
 interface EditGrowFormProps {
@@ -29,6 +30,14 @@ interface PartialUpdateData {
 }
 
 export default function EditGrowForm({ grow }: EditGrowFormProps) {
+  const formatDateForInput = (
+    date: Date | string | null | undefined
+  ): string => {
+    if (!date) return "";
+    const dateObj = date instanceof Date ? date : new Date(date);
+    return dateObj.toISOString().split("T")[0];
+  };
+
   const handleUpdate = async (formData: FormData) => {
     "use server";
 
@@ -42,13 +51,16 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
     const sunset_time_flower = formData.get("sunset_time_flower") as string;
     const number_of_pots = formData.get("number_of_pots") as string;
     const pot_volume = formData.get("pot_volume") as string;
+    const vegetative_start_date = formData.get(
+      "vegetative_start_date"
+    ) as string;
     const flower_start_date = formData.get("flower_start_date") as string;
     const flower_end_date = formData.get("flower_end_date") as string;
     const breeder_name = formData.get("breeder_name") as string;
     const grower_name = formData.get("grower_name") as string;
     const grow_finished = formData.get("grow_finished") as string;
 
-    console.log(breeder_name);
+    console.log(grow_finished);
 
     const dataToUpdate: PartialUpdateData = {};
 
@@ -64,11 +76,13 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
       dataToUpdate.sunset_time_flower = sunset_time_flower;
     if (number_of_pots) dataToUpdate.number_of_pots = parseInt(number_of_pots);
     if (pot_volume) dataToUpdate.pot_volume = parseFloat(pot_volume);
+    if (vegetative_start_date)
+      dataToUpdate.vegetative_start_date = vegetative_start_date;
     if (flower_start_date) dataToUpdate.flower_start_date = flower_start_date;
     if (flower_end_date) dataToUpdate.flower_end_date = flower_end_date;
     if (breeder_name) dataToUpdate.breeder_name = breeder_name;
     if (grower_name) dataToUpdate.grower_name = grower_name;
-    if (grow_finished) dataToUpdate.grow_finished = grow_finished === "true";
+    dataToUpdate.grow_finished = grow_finished;
 
     const result = await updateRecord(id, "grows", dataToUpdate);
 
@@ -294,7 +308,7 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
                 htmlFor="pot_volume"
                 className="block text-sm font-medium mb-1"
               >
-                Pot Volume (Liters)
+                Pot Volume (Milliliters)
               </label>
               <input
                 type="number"
@@ -302,7 +316,7 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
                 name="pot_volume"
                 defaultValue={grow.pot_volume || ""}
                 min="0"
-                step="0.1"
+                step="10"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="e.g. 11.5"
               />
@@ -315,6 +329,23 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
           <h3 className="text-lg font-medium mb-3">Grow Timeline</h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Vegetative Start Date */}
+            <div>
+              <label
+                htmlFor="vegetative_start_date"
+                className="block text-sm font-medium mb-1"
+              >
+                Vegetative Start Date
+              </label>
+              <input
+                type="date"
+                id="vegetative_start_date"
+                name="vegetative_start_date"
+                defaultValue={formatDateForInput(grow?.vegetative_start_date)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
             {/* Flower Start Date */}
             <div>
               <label
@@ -327,7 +358,7 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
                 type="date"
                 id="flower_start_date"
                 name="flower_start_date"
-                defaultValue={grow.flower_start_date || ""}
+                defaultValue={formatDateForInput(grow?.flower_start_date)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
@@ -344,7 +375,7 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
                 type="date"
                 id="flower_end_date"
                 name="flower_end_date"
-                defaultValue={grow.flower_end_date || ""}
+                defaultValue={formatDateForInput(grow?.flower_end_date)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
@@ -353,11 +384,12 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
           {/* Grow Finished Checkbox */}
           <div className="mt-4">
             <label className="flex items-center">
+              <input type="hidden" name="grow_finished" value="false" />
               <input
                 type="checkbox"
                 name="grow_finished"
                 value="true"
-                defaultChecked={grow.grow_finished || false}
+                defaultChecked={grow.grow_finished === "true" ? true : false}
                 className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
               <span className="text-sm font-medium">Grow Finished</span>

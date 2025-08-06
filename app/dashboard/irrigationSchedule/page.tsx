@@ -5,26 +5,10 @@ import NumberInput from "@/app/components/NumberInput";
 import Image from "next/image";
 
 export default async function IrrigationSchedule() {
-  const grows = await fetchGrows();
   const currentlySelected = await fetchCurrentlySelectedGrow();
 
   return (
     <div>
-      <div className="mx-auto shadow-md rounded-lg pb-4">
-        <p>Strain - Grow Note - Currently Selected</p>
-        <ul className="max-h-15 overflow-y-scroll border border-gray-300 rounded-md p-2 ">
-          {grows.fetchGrows?.map((grow) => (
-            <li
-              className="p-1 border-b border-gray-200 last:border-b-0"
-              key={grow.id}
-            >
-              <p>
-                {grow.strain} - {grow.grow_notes} - {grow.currently_selected}
-              </p>
-            </li>
-          ))}
-        </ul>
-      </div>
       <h2>Irrigation Schedule</h2>
       <p>Manage your grows irrigation schedule here.</p>
       <div className="flex flex-row">
