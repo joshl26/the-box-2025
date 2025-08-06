@@ -16,7 +16,7 @@ export default async function IrrigationSchedule() {
           {grows.fetchGrows?.map((grow) => (
             <li
               className="p-1 border-b border-gray-200 last:border-b-0"
-              key={grow.Id}
+              key={grow.id}
             >
               <p>
                 {grow.strain} - {grow.grow_notes} - {grow.currently_selected}

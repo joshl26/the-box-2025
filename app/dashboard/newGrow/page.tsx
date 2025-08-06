@@ -4,7 +4,6 @@ import {
   fetchGrows,
   createGrow,
   deleteGrow,
-  updateGrow,
   updateRecord,
 } from "@/app/actions";
 
@@ -18,20 +17,20 @@ export default async function NewGrowPage() {
   const handleCreate = async (formData: FormData) => {
     "use server"; // This Server Action is defined inline
 
-    const Id = formData.get("Id") as string;
-    const strain = formData.get("strain") as string;
-    const growNotes = formData.get("growNotes") as string;
+    // const Id = formData.get("Id") as string;
+    // const strain = formData.get("strain") as string;
+    // const growNotes = formData.get("growNotes") as string;
 
     // const dataToUpdate: PartialUpdateData = {};
     // if (strain) dataToUpdate.strain = strain;
     // if (growNotes) dataToUpdate.growNotes = growNotes;
 
-    // const result = await createGrow(Id);
-    // if (result.success) {
-    //   console.log("Record updated successfully:", result.updatedRecord);
-    // } else {
-    //   console.error("Update failed:", result.error);
-    // }
+    const result = await createGrow(formData);
+    if (result.success) {
+      console.log("Record updated successfully!");
+    } else {
+      console.error("Update failed:", result.error);
+    }
   };
 
   return (
@@ -81,23 +80,6 @@ export default async function NewGrowPage() {
           </button>
         </form>
       </div>
-
-      {/* Grow List */}
-      <div className=" shadow-md rounded-lg p-6">
-        <h2 className="text-xl font-semibold mb-4">Current Grows</h2>
-
-        {grows.success && grows.fetchGrows && grows.fetchGrows.length > 0 ? (
-          <div className="space-y-4">
-            {grows.fetchGrows.map((grow) => (
-              <GrowItem key={grow.Id} grow={grow} />
-            ))}
-          </div>
-        ) : (
-          <p className="text-gray-500">
-            No grows found. Add your first grow above!
-          </p>
-        )}
-      </div>
     </div>
   );
 }
@@ -117,7 +99,7 @@ function GrowItem({ grow }: { grow: any }) {
 
         <div className="flex space-x-2 ml-4">
           <EditGrowForm grow={grow} />
-          <DeleteGrowForm growId={grow.Id} />
+          <DeleteGrowForm growId={grow.id} />
         </div>
       </div>
     </div>
@@ -129,7 +111,7 @@ function EditGrowForm({ grow }: { grow: any }) {
   const handleUpdate = async (formData: FormData) => {
     "use server"; // This Server Action is defined inline
 
-    const Id = formData.get("Id") as string;
+    const id = formData.get("id") as string;
     const strain = formData.get("strain") as string;
     const grow_notes = formData.get("grow_notes") as string;
 
@@ -137,7 +119,7 @@ function EditGrowForm({ grow }: { grow: any }) {
     if (strain) dataToUpdate.strain = strain;
     if (grow_notes) dataToUpdate.grow_notes = grow_notes;
 
-    const result = await updateRecord(Id, "grows", dataToUpdate);
+    const result = await updateRecord(id, "grows", dataToUpdate);
     if (result.success) {
       console.log("Record updated successfully:", result.updatedRecord);
     } else {
@@ -152,7 +134,7 @@ function EditGrowForm({ grow }: { grow: any }) {
 
       <div className="absolute right-0 top-8 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-10 w-80">
         <form action={handleUpdate} className="space-y-3">
-          <input type="hidden" name="Id" value={grow.Id} />
+          <input type="hidden" name="Id" value={grow.id} />
 
           <div>
             <label
@@ -163,7 +145,7 @@ function EditGrowForm({ grow }: { grow: any }) {
             </label>
             <input
               type="text"
-              id={`strain-${grow.Id}`}
+              id={`strain-${grow.id}`}
               name="strain"
               defaultValue={grow.strain}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
@@ -172,13 +154,13 @@ function EditGrowForm({ grow }: { grow: any }) {
 
           <div>
             <label
-              htmlFor={`grow_notes-${grow.Id}`}
+              htmlFor={`grow_notes-${grow.id}`}
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Grow Notes
             </label>
             <textarea
-              id={`grow_notes-${grow.Id}`}
+              id={`grow_notes-${grow.id}`}
               name="grow_notes"
               defaultValue={grow.grow_notes}
               rows={2}
@@ -213,12 +195,12 @@ function DeleteGrowForm({ growId }: { growId: number }) {
     // if (strain) dataToUpdate.strain = strain;
     // if (grow_notes) dataToUpdate.grow_notes = grow_notes;
 
-    // const result = await updateRecord(Id, "grows", dataToUpdate);
-    // if (result.success) {
-    //   console.log("Record updated successfully:", result.updatedRecord);
-    // } else {
-    //   console.error("Update failed:", result.error);
-    // }
+    const result = await deleteGrow(formData);
+    if (result.success) {
+      console.log("Record updated successfully!");
+    } else {
+      console.error("Update failed:", result.error);
+    }
   };
 
   return (

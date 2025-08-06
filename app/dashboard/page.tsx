@@ -16,9 +16,9 @@ export default async function DashboardPage() {
           </p>
 
           {grows.success && grows.fetchGrows && grows.fetchGrows.length > 0 ? (
-            <div className="max-h-35 overflow-y-scroll border border-gray-300 rounded-md ">
+            <div className="min-h-100 overflow-y-scroll border border-gray-300 rounded-md ">
               {grows.fetchGrows.map((grow) => (
-                <SelectableGrowItem key={grow.Id} grow={grow} />
+                <SelectableGrowItem key={grow.id} grow={grow} />
               ))}
             </div>
           ) : (
@@ -47,11 +47,24 @@ export default async function DashboardPage() {
 
 // Selectable grow item component using server actions
 function SelectableGrowItem({ grow }: { grow: any }) {
+  // boolean check for displaying which grow is selected
   const isActive = grow.currently_selected === "true";
 
+  const handleUpdate = async (formData: FormData) => {
+    "use server";
+
+    const result = await setActiveGrow(formData);
+
+    if (result.success) {
+      console.log("Record updated successfully!");
+    } else {
+      console.error("Update failed:", result.error);
+    }
+  };
+
   return (
-    <form action={setActiveGrow} className="w-full ">
-      <input type="hidden" name="growId" value={grow.Id} />
+    <form action={handleUpdate} className="w-full ">
+      <input type="hidden" name="growId" value={grow.id} />
       <button
         type="submit"
         className={`w-full text-left p-3 border-b border-gray-200 last:border-b-0 transition-all duration-200  hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset ${

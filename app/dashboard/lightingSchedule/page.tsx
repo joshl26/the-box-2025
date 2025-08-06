@@ -26,7 +26,7 @@ export default async function LightingScheduleForm() {
   const handleUpdate = async (formData: FormData) => {
     "use server";
 
-    const Id = formData.get("Id") as string;
+    const id = formData.get("id") as string;
     const sunrise_time_veg = formData.get("sunrise_time_veg") as string;
     const sunset_time_veg = formData.get("sunset_time_veg") as string;
     const sunrise_time_flower = formData.get("sunrise_time_flower") as string;
@@ -43,7 +43,7 @@ export default async function LightingScheduleForm() {
     if (sunset_time_flower)
       dataToUpdate.sunset_time_flower = parseInt(sunset_time_flower);
 
-    const result = await updateRecord(Id, "grows", dataToUpdate);
+    const result = await updateRecord(id, "grows", dataToUpdate);
 
     if (result.success) {
       console.log(
@@ -64,11 +64,11 @@ export default async function LightingScheduleForm() {
       .padStart(2, "0")}`;
   };
 
-  // Helper function to convert HH:MM format to minutes
-  const timeToMinutes = (time: string): number => {
-    const [hours, minutes] = time.split(":").map(Number);
-    return hours * 60 + minutes;
-  };
+  // // Helper function to convert HH:MM format to minutes
+  // const timeToMinutes = (time: string): number => {
+  //   const [hours, minutes] = time.split(":").map(Number);
+  //   return hours * 60 + minutes;
+  // };
 
   return (
     <div className="max-w-2xl mx-auto  shadow-md rounded-lg p-6">
@@ -77,7 +77,7 @@ export default async function LightingScheduleForm() {
       </h2>
 
       <form action={handleUpdate} className="space-y-8">
-        <input type="hidden" name="Id" value={grow.Id} />
+        <input type="hidden" name="Id" value={grow.id} />
 
         {/* Vegetative Stage */}
         <div className="bg-green-50 p-6 rounded-lg border border-green-200">

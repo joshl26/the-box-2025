@@ -12,7 +12,7 @@ interface PartialUpdateData {
 
 export async function fetchGrows() {
   try {
-    const result = await pool.query('SELECT * FROM grows ORDER BY "Id" ASC');
+    const result = await pool.query('SELECT * FROM grows ORDER BY "id" ASC');
     return { success: true, fetchGrows: result.rows };
   } catch (error) {
     console.error("Error fetching grows:", error);
@@ -33,7 +33,7 @@ export async function fetchCurrentlySelectedGrow() {
 }
 
 export async function updateRecord(
-  Id: string,
+  id: string,
   tableName: string,
   dataToUpdate: PartialUpdateData
 ) {
@@ -46,8 +46,8 @@ export async function updateRecord(
       .map((col, index) => `"${col}" = $${index + 2}`) // $1 for Id, then $2, $3...
       .join(", ");
 
-    const query = `UPDATE ${tableName} SET ${setClause} WHERE "Id" = $1 RETURNING *;`;
-    const result = await pool.query(query, [Id, ...values]);
+    const query = `UPDATE ${tableName} SET ${setClause} WHERE "id" = $1 RETURNING *;`;
+    const result = await pool.query(query, [id, ...values]);
 
     revalidatePath(`/${tableName}`); // Revalidate the relevant path after update
     return { success: true, updatedRecord: result.rows[0] };
@@ -120,14 +120,23 @@ export async function createGrow(formData: FormData) {
       return { success: false, error: "Strain and grow notes are required." };
     }
 
-    const result = await pool.query(
+    await pool.query(
       'INSERT INTO grows ("strain", "grow_notes") VALUES ($1, $2) RETURNING *',
       [strain, grow_notes]
     );
-
+    // Revalidate the path first
     revalidatePath("/dashboard/newGrow");
-    return { success: true, grow: result.rows[0] };
+    revalidatePath("/dashboard/");
+
+    // Redirect - this throws an exception and doesn't return
+    redirect("/dashboard/");
   } catch (error) {
+    // Handle redirect errors separately from other errors
+    if (error && typeof error === "object" && "digest" in error) {
+      // This is likely a Next.js redirect, re-throw it
+      throw error;
+    }
+
     console.error("Error creating grow:", error);
     return { success: false, error: "Failed to create grow." };
   }
@@ -142,7 +151,7 @@ export async function deleteGrow(formData: FormData) {
     }
 
     const result = await pool.query(
-      'DELETE FROM grows WHERE "Id" = $1 RETURNING *',
+      'DELETE FROM grows WHERE "id" = $1 RETURNING *',
       [Id]
     );
 
@@ -160,11 +169,11 @@ export async function deleteGrow(formData: FormData) {
 
 export async function updateGrow(formData: FormData) {
   try {
-    const Id = formData.get("Id") as string;
+    const id = formData.get("id") as string;
     const strain = formData.get("strain") as string;
     const grow_notes = formData.get("grow_notes") as string;
 
-    if (!Id) {
+    if (!id) {
       return { success: false, error: "Grow ID is required." };
     }
 
@@ -172,11 +181,11 @@ export async function updateGrow(formData: FormData) {
     if (strain) dataToUpdate.strain = strain;
     if (grow_notes) dataToUpdate.grow_notes = grow_notes;
 
-    const result = await updateRecord(Id, "grows", dataToUpdate);
+    const result = await updateRecord(id, "grows", dataToUpdate);
 
     if (result.success) {
-      revalidatePath("/dashboard/newGrow");
-      return { success: true, grow: result.updatedRecord };
+      redirect("/dashboard");
+      // return { success: true, grow: result.updatedRecord };
     } else {
       return result;
     }
@@ -203,7 +212,7 @@ export async function setActiveGrow(formData: FormData) {
 
     // Then set the selected grow to currently_selected = 'true'
     const result = await pool.query(
-      'UPDATE grows SET currently_selected = $1 WHERE "Id" = $2 RETURNING *',
+      'UPDATE grows SET currently_selected = $1 WHERE "id" = $2 RETURNING *',
       ["true", newActiveId]
     );
 

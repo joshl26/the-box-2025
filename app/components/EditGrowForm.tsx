@@ -2,7 +2,7 @@
 import { updateRecord } from "../actions";
 
 interface Grow {
-  Id: number;
+  id: number;
   strain: string;
   grow_notes: string;
   currently_selected: string;
@@ -21,7 +21,7 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
   const handleUpdate = async (formData: FormData) => {
     "use server";
 
-    const Id = formData.get("Id") as string;
+    const id = formData.get("id") as string;
     const strain = formData.get("strain") as string;
     const grow_notes = formData.get("grow_notes") as string;
     const currently_selected = formData.get("currently_selected") as string;
@@ -33,7 +33,7 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
     if (currently_selected)
       dataToUpdate.currently_selected = currently_selected;
 
-    const result = await updateRecord(Id, "grows", dataToUpdate);
+    const result = await updateRecord(id, "grows", dataToUpdate);
 
     if (result.success) {
       console.log("Record updated successfully:", result.updatedRecord);
@@ -47,7 +47,7 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
       <h2 className="text-xl font-semibold mb-4">Edit Grow Details</h2>
 
       <form action={handleUpdate} className="space-y-4">
-        <input type="hidden" name="Id" value={grow.Id} />
+        <input type="hidden" name="id" value={grow.id} />
 
         {/* Strain Input */}
         <div>

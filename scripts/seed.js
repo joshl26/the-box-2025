@@ -19,7 +19,7 @@ async function seedDatabase() {
 
     await pool.query(
       `CREATE TABLE grows (
-      Id SERIAL PRIMARY KEY, 
+      id SERIAL PRIMARY KEY, 
       strain VARCHAR(255) NOT NULL, 
       grow_notes VARCHAR(255), 
       sunrise_time_veg INTEGER DEFAULT 0,    
