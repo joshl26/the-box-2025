@@ -21,7 +21,6 @@ import pool from "../../db/db";
 
 const mockPool = pool as jest.Mocked<typeof pool>;
 
-
 describe("Server Actions", () => {
   beforeEach(() => {
     jest.clearAllMocks();
