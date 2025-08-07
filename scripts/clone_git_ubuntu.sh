@@ -13,11 +13,11 @@ GITHUB_TOKEN="https://oauth2:github_pat_11AX3YOJI0fBImrI3Ar36E_m0YSay4beHk5tkQh5
 
 echo "Stopping and deleting all PM2 processes..."
 # Stop all PM2 processes first, then delete them
-sudo pm2 stop all || :
-sudo pm2 delete all || :
+pm2 stop all || :
+pm2 delete all || :
 
 # Flush PM2 logs and reset
-sudo pm2 flush || :
+pm2 flush || :
 
 echo "Deleting existing directory: $TARGET_DIR"
 # Remove the existing directory and its contents
@@ -71,18 +71,18 @@ fi
 
 # Delete any existing instance of "the-box-2025" specifically
 echo "Ensuring no existing 'the-box-2025' PM2 processes..."
-sudo pm2 delete "the-box-2025" || :
+pm2 delete "the-box-2025" || :
 
 # Start the new PM2 process
 echo "Starting PM2 process..."
-sudo pm2 start npm --name "the-box-2025" -- start
+pm2 start npm --name "the-box-2025" -- start
 
 # Setup PM2 startup (only need to run this once, but it's idempotent)
-sudo pm2 startup systemd
+pm2 startup systemd
 
 # Save the current PM2 process list
-sudo pm2 save --force
+pm2 save --force
 
 echo "Script completed."
 echo "PM2 status:"
-sudo pm2 status
+pm2 status
