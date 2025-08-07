@@ -53,12 +53,14 @@ cd "$TARGET_DIR"
 
 npm i --legacy-peer-deps
 
-pm2 delete -s [the-box-2025] || :
+pm2 delete all || :
+
+pm2 startup systemd
 
 pm2 start npm --name "the-box-2025" -- start
 
 pm2 startup systemd
 
-pm2 save
+pm2 save --force
 
 echo "Script completed."
