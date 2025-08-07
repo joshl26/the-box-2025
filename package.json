@@ -11,8 +11,8 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:ci": "jest --ci --coverage --watchAll=false",
-    "seed": "ts-node --esm -r dotenv/config scripts/seed.js",
-    "test_db": "ts-node --esm -r dotenv/config scripts/test_db.js"
+    "seed": "ts-node --esm -r dotenv/config scripts/seed.mjs",
+    "test_db": "ts-node --esm -r dotenv/config scripts/test_db.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.535.0",
