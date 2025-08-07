@@ -58,7 +58,12 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
     const flower_end_date = formData.get("flower_end_date") as string;
     const breeder_name = formData.get("breeder_name") as string;
     const grower_name = formData.get("grower_name") as string;
-    const grow_finished = formData.get("grow_finished") as string;
+
+    // Fix for checkbox: Get all values and check if checkbox is checked
+    const grow_finished_values = formData.getAll("grow_finished") as string[];
+    const grow_finished = grow_finished_values.includes("true")
+      ? "true"
+      : "false";
 
     const dataToUpdate: PartialUpdateData = {};
 
@@ -80,6 +85,8 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
     if (flower_end_date) dataToUpdate.flower_end_date = flower_end_date;
     if (breeder_name) dataToUpdate.breeder_name = breeder_name;
     if (grower_name) dataToUpdate.grower_name = grower_name;
+
+    // Always include grow_finished (fixed)
     dataToUpdate.grow_finished = grow_finished;
 
     const result = await updateRecord(id, "grows", dataToUpdate);
@@ -387,7 +394,7 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
                 type="checkbox"
                 name="grow_finished"
                 value="true"
-                defaultChecked={grow.grow_finished === "true" ? true : false}
+                defaultChecked={grow.grow_finished === "true"}
                 className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
               <span className="text-sm font-medium">Grow Finished</span>
