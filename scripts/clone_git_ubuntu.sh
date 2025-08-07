@@ -11,6 +11,14 @@ GITHUB_TOKEN="https://oauth2:github_pat_11AX3YOJI0fBImrI3Ar36E_m0YSay4beHk5tkQh5
 
 # --- Script Execution ---
 
+echo "Stopping and deleting all PM2 processes..."
+# Stop all PM2 processes first, then delete them
+sudo pm2 stop all || :
+sudo pm2 delete all || :
+
+# Flush PM2 logs and reset
+sudo pm2 flush || :
+
 echo "Deleting existing directory: $TARGET_DIR"
 # Remove the existing directory and its contents
 rm -rf "$TARGET_DIR"
@@ -35,32 +43,46 @@ else
     exit 1
 fi
 
-echo "Cloning .env file into $TARGET_DIR"
-# Clone the .env file
+echo "Copying .env file into $TARGET_DIR"
+# Copy the .env file
 cp .env-the-box-2025 "$TARGET_DIR"/.env
 
-# Check if the cloning was successful
+# Check if the copying was successful
 if [ $? -eq 0 ]; then
-    echo ".env file cloned successfully."
+    echo ".env file copied successfully."
 else
-    echo "Error cloning .env file. Exiting."
+    echo "Error copying .env file. Exiting."
     exit 1
 fi
 
-echo"Navigate into $TARGET_DIRECTORY and run npm i --legacy-peer-deps"
+echo "Navigate into $TARGET_DIR and run npm i --legacy-peer-deps"
 # Navigate and run npm i --legacy-peer-deps
 cd "$TARGET_DIR"
 
 sudo npm i --legacy-peer-deps
 
-sudo pm2 delete all || :
+# Check if npm install was successful
+if [ $? -eq 0 ]; then
+    echo "npm install completed successfully."
+else
+    echo "Error during npm install. Exiting."
+    exit 1
+fi
 
-sudo pm2 startup systemd
+# Delete any existing instance of "the-box-2025" specifically
+echo "Ensuring no existing 'the-box-2025' PM2 processes..."
+sudo pm2 delete "the-box-2025" || :
 
+# Start the new PM2 process
+echo "Starting PM2 process..."
 sudo pm2 start npm --name "the-box-2025" -- start
 
+# Setup PM2 startup (only need to run this once, but it's idempotent)
 sudo pm2 startup systemd
 
+# Save the current PM2 process list
 sudo pm2 save --force
 
 echo "Script completed."
+echo "PM2 status:"
+sudo pm2 status
