@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { updateValueAction } from "../actions";
 
 interface TimeInputProps {
@@ -31,6 +31,11 @@ export default function TimeInput({
 
   const [timeValue, setTimeValue] = useState(formatTimeString(initialValue));
   const [isPending, startTransition] = useTransition();
+
+  // Update the time value when initialValue changes (e.g., when growth cycle changes)
+  useEffect(() => {
+    setTimeValue(formatTimeString(initialValue));
+  }, [initialValue]);
 
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTimeString = e.target.value;

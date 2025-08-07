@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { updateValueAction } from "../actions";
 
 interface NumberInputProps {
@@ -21,6 +21,11 @@ export default function NumberInput({
   const [value, setValue] = useState(initialValue);
   const [isPending, startTransition] = useTransition();
 
+  // Update the value when initialValue changes (e.g., when growth cycle changes)
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
   const handleChange = (newValue: number) => {
     // Apply min/max constraints
     if (min !== undefined && newValue < min) newValue = min;
@@ -36,7 +41,7 @@ export default function NumberInput({
       } catch (error) {
         console.error("Failed to update value:", error);
         // Revert the value on error
-        setValue(value);
+        setValue(initialValue);
       }
     });
   };
