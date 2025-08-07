@@ -1,10 +1,11 @@
 // app/components/GrowthCycleRadioButton.tsx
 
 import { fetchCurrentlySelectedGrow, updateRecord } from "../actions";
+import { revalidatePath } from "next/cache";
 
 interface PartialUpdateData {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any; // Allows for any key-value pair for partial updates
+  [key: string]: any;
 }
 
 export default async function GrowthCycleRadioButton() {
@@ -15,75 +16,189 @@ export default async function GrowthCycleRadioButton() {
 
   const recordId = currentlySelected.fetchCurrentlySelectedGrow.id;
 
-  const handleUpdate = async (formData: FormData) => {
-    "use server"; // This Server Action is defined inline
+  const handleVegGrowth = async () => {
+    "use server";
 
-    const id = formData.get("recordId") as string;
+    const dataToUpdate: PartialUpdateData = {
+      growth_cycle: "veg_growth",
+    };
 
-    const growth_cycle = formData.get("myRadioGroup") as string;
+    const result = await updateRecord(
+      recordId.toString(),
+      "grows",
+      dataToUpdate
+    );
 
-    const dataToUpdate: PartialUpdateData = {};
-
-    if (growth_cycle) dataToUpdate.growth_cycle = growth_cycle;
-
-    const result = await updateRecord(id, "grows", dataToUpdate);
     if (result.success) {
-      console.log("Record updated successfully:", result.updatedRecord);
+      console.log("Growth cycle updated successfully:", result.updatedRecord);
+      revalidatePath("/dashboard/irrigationSchedule");
+    } else {
+      console.error("Update failed:", result.error);
+    }
+  };
+
+  const handleGenFlowerStart = async () => {
+    "use server";
+
+    const dataToUpdate: PartialUpdateData = {
+      growth_cycle: "gen_flower_start",
+    };
+
+    const result = await updateRecord(
+      recordId.toString(),
+      "grows",
+      dataToUpdate
+    );
+
+    if (result.success) {
+      console.log("Growth cycle updated successfully:", result.updatedRecord);
+      revalidatePath("/dashboard/irrigationSchedule");
+    } else {
+      console.error("Update failed:", result.error);
+    }
+  };
+
+  const handleVegFlowerMid = async () => {
+    "use server";
+
+    const dataToUpdate: PartialUpdateData = {
+      growth_cycle: "veg_flower_mid",
+    };
+
+    const result = await updateRecord(
+      recordId.toString(),
+      "grows",
+      dataToUpdate
+    );
+
+    if (result.success) {
+      console.log("Growth cycle updated successfully:", result.updatedRecord);
+      revalidatePath("/dashboard/irrigationSchedule");
+    } else {
+      console.error("Update failed:", result.error);
+    }
+  };
+
+  const handleGenFlowerEnd = async () => {
+    "use server";
+
+    const dataToUpdate: PartialUpdateData = {
+      growth_cycle: "gen_flower_end",
+    };
+
+    const result = await updateRecord(
+      recordId.toString(),
+      "grows",
+      dataToUpdate
+    );
+
+    if (result.success) {
+      console.log("Growth cycle updated successfully:", result.updatedRecord);
+      revalidatePath("/dashboard/irrigationSchedule");
     } else {
       console.error("Update failed:", result.error);
     }
   };
 
   return (
-    <form action={handleUpdate}>
-      <input type="hidden" name="recordId" value={recordId} />
-      <div>
-        <input
-          type="radio"
-          id="option1"
-          name="myRadioGroup"
-          value="veg_growth"
-          defaultChecked={selectedGrowthCycle === "veg_growth" ? true : false}
-        />
-        <label htmlFor="option1">Vegetative Growth</label>
+    <div className="space-y-3">
+      <div className="space-y-2">
+        <form action={handleVegGrowth}>
+          <button
+            type="submit"
+            className={`flex items-center w-full text-left p-2 rounded transition-colors ${
+              selectedGrowthCycle === "veg_growth"
+                ? "bg-blue-100 border-2 border-blue-500"
+                : "hover:bg-gray-50 border-2 border-transparent"
+            }`}
+          >
+            <div
+              className={`w-4 h-4 rounded-full border-2 mr-2 flex items-center justify-center ${
+                selectedGrowthCycle === "veg_growth"
+                  ? "border-blue-500 bg-blue-500"
+                  : "border-gray-300"
+              }`}
+            >
+              {selectedGrowthCycle === "veg_growth" && (
+                <div className="w-2 h-2 rounded-full bg-white"></div>
+              )}
+            </div>
+            Vegetative Growth
+          </button>
+        </form>
+
+        <form action={handleGenFlowerStart}>
+          <button
+            type="submit"
+            className={`flex items-center w-full text-left p-2 rounded transition-colors ${
+              selectedGrowthCycle === "gen_flower_start"
+                ? "bg-blue-100 border-2 border-blue-500"
+                : "hover:bg-gray-50 border-2 border-transparent"
+            }`}
+          >
+            <div
+              className={`w-4 h-4 rounded-full border-2 mr-2 flex items-center justify-center ${
+                selectedGrowthCycle === "gen_flower_start"
+                  ? "border-blue-500 bg-blue-500"
+                  : "border-gray-300"
+              }`}
+            >
+              {selectedGrowthCycle === "gen_flower_start" && (
+                <div className="w-2 h-2 rounded-full bg-white"></div>
+              )}
+            </div>
+            Generative Flower Start
+          </button>
+        </form>
+
+        <form action={handleVegFlowerMid}>
+          <button
+            type="submit"
+            className={`flex items-center w-full text-left p-2 rounded transition-colors ${
+              selectedGrowthCycle === "veg_flower_mid"
+                ? "bg-blue-100 border-2 border-blue-500"
+                : "hover:bg-gray-50 border-2 border-transparent"
+            }`}
+          >
+            <div
+              className={`w-4 h-4 rounded-full border-2 mr-2 flex items-center justify-center ${
+                selectedGrowthCycle === "veg_flower_mid"
+                  ? "border-blue-500 bg-blue-500"
+                  : "border-gray-300"
+              }`}
+            >
+              {selectedGrowthCycle === "veg_flower_mid" && (
+                <div className="w-2 h-2 rounded-full bg-white"></div>
+              )}
+            </div>
+            Vegetative Flower Middle
+          </button>
+        </form>
+
+        <form action={handleGenFlowerEnd}>
+          <button
+            type="submit"
+            className={`flex items-center w-full text-left p-2 rounded transition-colors ${
+              selectedGrowthCycle === "gen_flower_end"
+                ? "bg-blue-100 border-2 border-blue-500"
+                : "hover:bg-gray-50 border-2 border-transparent"
+            }`}
+          >
+            <div
+              className={`w-4 h-4 rounded-full border-2 mr-2 flex items-center justify-center ${
+                selectedGrowthCycle === "gen_flower_end"
+                  ? "border-blue-500 bg-blue-500"
+                  : "border-gray-300"
+              }`}
+            >
+              {selectedGrowthCycle === "gen_flower_end" && (
+                <div className="w-2 h-2 rounded-full bg-white"></div>
+              )}
+            </div>
+            Generative Flower End
+          </button>
+        </form>
       </div>
-      <div>
-        <input
-          type="radio"
-          id="option2"
-          name="myRadioGroup"
-          value="gen_flower_start"
-          defaultChecked={
-            selectedGrowthCycle === "gen_flower_start" ? true : false
-          }
-        />
-        <label htmlFor="option2">Generative Flower Start</label>
-      </div>
-      <div>
-        <input
-          type="radio"
-          id="option3"
-          name="myRadioGroup"
-          value="veg_flower_mid"
-          defaultChecked={
-            selectedGrowthCycle === "veg_flower_mid" ? true : false
-          }
-        />
-        <label htmlFor="option3">Vegetative Flower Middle</label>
-      </div>
-      <div>
-        <input
-          type="radio"
-          id="option4"
-          name="myRadioGroup"
-          value="gen_flower_end"
-          defaultChecked={
-            selectedGrowthCycle === "gen_flower_end" ? true : false
-          }
-        />
-        <label htmlFor="option4">Generative Flower End</label>
-      </div>
-      <button type="submit">Save Selection</button>
-    </form>
+    </div>
   );
 }

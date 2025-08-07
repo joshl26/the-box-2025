@@ -75,44 +75,118 @@ export async function handleMenuAction(action: string, value?: string) {
   // return { success: true, message: `Action ${action} completed` };
 }
 
-export async function updateValueAction(id: string, value: number) {
-  console.log(id, value);
+// Updated updateValueAction function to handle both numbers and time strings
+export async function updateValueAction(
+  fieldName: string,
+  value: number | string
+) {
+  try {
+    // Get the currently selected grow
+    const currentGrowResult = await fetchCurrentlySelectedGrow();
 
-  // try {
-  //   const client = await pool.connect();
-  //   try {
-  //     // Update the value in the database
-  //     // Adjust the table name and column names as needed
-  //     const query = `
-  //       UPDATE number_inputs
-  //       SET value = $1, updated_at = NOW()
-  //       WHERE id = $2
-  //     `;
-  //     const result = await client.query(query, [value, id]);
-  //     if (result.rowCount === 0) {
-  //       // If no rows were updated, create a new record
-  //       const insertQuery = `
-  //         INSERT INTO number_inputs (id, value, created_at, updated_at)
-  //         VALUES ($1, $2, NOW(), NOW())
-  //         ON CONFLICT (id) DO UPDATE SET
-  //           value = EXCLUDED.value,
-  //           updated_at = EXCLUDED.updated_at
-  //       `;
-  //       await client.query(insertQuery, [id, value]);
-  //     }
-  //     // Revalidate the current path to refresh any cached data
-  //
-  //     return { success: true };
-  //   } finally {
-  //     client.release();
-  //   }
-  // } catch (error) {
-  //   console.error("Database error:", error);
-  //   throw new Error("Failed to update value in database");
-  // }
-  revalidatePath("/dashboard/irrigationSchdule");
+    if (
+      !currentGrowResult.success ||
+      !currentGrowResult.fetchCurrentlySelectedGrow
+    ) {
+      throw new Error("No currently selected grow found");
+    }
+
+    const growData = currentGrowResult.fetchCurrentlySelectedGrow;
+    const growId = growData.id;
+    const growthCycle = growData.growth_cycle;
+
+    // Map field names to database columns based on current growth cycle
+    let dbColumnName = "";
+
+    // Create a mapping object for cleaner logic
+    const fieldMappings: { [key: string]: { [cycle: string]: string } } = {
+      p1_num_shots: {
+        veg_growth: "p1_num_shots_growth",
+        gen_flower_start: "p1_num_shots_flower_start",
+        veg_flower_mid: "p1_num_shots_flower_middle",
+        gen_flower_end: "p1_num_shots_flower_end",
+      },
+      p1_start_time: {
+        veg_growth: "p1_start_time_growth",
+        gen_flower_start: "p1_start_time_flower_start",
+        veg_flower_mid: "p1_start_time_flower_middle",
+        gen_flower_end: "p1_start_time_flower_end",
+      },
+      p1_shot_size: {
+        veg_growth: "p1_shot_size_growth",
+        gen_flower_start: "p1_shot_size_flower_start",
+        veg_flower_mid: "p1_shot_size_flower_middle",
+        gen_flower_end: "p1_shot_size_flower_end",
+      },
+      p2_num_shots: {
+        veg_growth: "p2_num_shots_growth",
+        gen_flower_start: "p2_num_shots_flower_start",
+        veg_flower_mid: "p2_num_shots_flower_middle",
+        gen_flower_end: "p2_num_shots_flower_end",
+      },
+      p2_start_time: {
+        veg_growth: "p2_start_time_growth",
+        gen_flower_start: "p2_start_time_flower_start",
+        veg_flower_mid: "p2_start_time_flower_middle",
+        gen_flower_end: "p2_start_time_flower_end",
+      },
+      p2_shot_size: {
+        veg_growth: "p2_shot_size_growth",
+        gen_flower_start: "p2_shot_size_flower_start",
+        veg_flower_mid: "p2_shot_size_flower_middle",
+        gen_flower_end: "p2_shot_size_flower_end",
+      },
+      p3_num_shots: {
+        veg_growth: "p3_num_shots_growth",
+        gen_flower_start: "p3_num_shots_flower_start",
+        veg_flower_mid: "p3_num_shots_flower_middle",
+        gen_flower_end: "p3_num_shots_flower_end",
+      },
+      p3_start_time: {
+        veg_growth: "p3_start_time_growth",
+        gen_flower_start: "p3_start_time_flower_start",
+        veg_flower_mid: "p3_start_time_flower_middle",
+        gen_flower_end: "p3_start_time_flower_end",
+      },
+      p3_shot_size: {
+        veg_growth: "p3_shot_size_growth",
+        gen_flower_start: "p3_shot_size_flower_start",
+        veg_flower_mid: "p3_shot_size_flower_middle",
+        gen_flower_end: "p3_shot_size_flower_end",
+      },
+    };
+
+    // Get the database column name
+    if (fieldMappings[fieldName] && fieldMappings[fieldName][growthCycle]) {
+      dbColumnName = fieldMappings[fieldName][growthCycle];
+    }
+
+    if (!dbColumnName) {
+      throw new Error(
+        `Unknown field name: ${fieldName} for growth cycle: ${growthCycle}`
+      );
+    }
+
+    // Use existing updateRecord function
+    const dataToUpdate: PartialUpdateData = {
+      [dbColumnName]: value,
+    };
+
+    const result = await updateRecord(growId.toString(), "grows", dataToUpdate);
+
+    if (result.success) {
+      console.log(`Updated ${dbColumnName} to ${value} for grow ${growId}`);
+      // Additional revalidation for irrigation schedule
+      revalidatePath("/dashboard/irrigationSchedule");
+      return result;
+    } else {
+      throw new Error(result.error || "Failed to update irrigation value");
+    }
+  } catch (error) {
+    console.error("Error updating irrigation value:", error);
+    throw new Error("Failed to update irrigation value");
+  }
 }
-
 export async function createGrow(formData: FormData) {
   try {
     const strain = formData.get("strain") as string;
@@ -203,8 +277,6 @@ export async function updateGrow(formData: FormData) {
     return { success: false, error: "Failed to update grow." };
   }
 }
-
-// Add this to your app/actions.ts file
 
 export async function setActiveGrow(formData: FormData) {
   "use server";

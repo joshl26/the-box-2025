@@ -28,13 +28,14 @@ export default function NumberInput({
 
     setValue(newValue);
 
-    // Update database using server action
+    // Update database using existing server action
     startTransition(async () => {
       try {
         await updateValueAction(id, newValue);
+        console.log(`Successfully updated ${id} to ${newValue}`);
       } catch (error) {
         console.error("Failed to update value:", error);
-        // Optionally revert the value on error
+        // Revert the value on error
         setValue(value);
       }
     });
@@ -49,39 +50,41 @@ export default function NumberInput({
   };
 
   return (
-    <div className="flex items-center border  rounded-md overflow-hidden">
-      <button
-        onClick={decrement}
-        disabled={isPending || (min !== undefined && value <= min)}
-        className="px-3 py-2   disabled:opacity-50 disabled:cursor-not-allowed"
-        type="button"
-      >
-        ↓
-      </button>
+    <div className="relative">
+      <div className="flex items-center border border-gray-300 rounded-md overflow-hidden">
+        <button
+          onClick={decrement}
+          disabled={isPending || (min !== undefined && value <= min)}
+          className="px-3 py-2 bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          type="button"
+        >
+          ↓
+        </button>
 
-      <input
-        type="number"
-        value={value}
-        onChange={handleInputChange}
-        disabled={isPending}
-        className="flex-1 px-3 py-2 text-center border-0 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-        min={min}
-        max={max}
-        step={step}
-      />
+        <input
+          type="number"
+          value={value}
+          onChange={handleInputChange}
+          disabled={isPending}
+          className="flex-1 px-3 py-2 text-center border-0 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+          min={min}
+          max={max}
+          step={step}
+        />
 
-      <button
-        onClick={increment}
-        disabled={isPending || (max !== undefined && value >= max)}
-        className="px-3 py-2  disabled:opacity-50 disabled:cursor-not-allowed"
-        type="button"
-      >
-        ↑
-      </button>
+        <button
+          onClick={increment}
+          disabled={isPending || (max !== undefined && value >= max)}
+          className="px-3 py-2 bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          type="button"
+        >
+          ↑
+        </button>
+      </div>
 
       {isPending && (
-        <div className="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center">
-          <div className="text-sm text-gray-500">Updating...</div>
+        <div className="absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center rounded-md">
+          <div className="text-sm text-gray-600 font-medium">Updating...</div>
         </div>
       )}
     </div>
