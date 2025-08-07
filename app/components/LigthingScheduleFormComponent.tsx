@@ -64,12 +64,6 @@ export default async function LightingScheduleForm() {
       .padStart(2, "0")}`;
   };
 
-  // Helper function to convert HH:MM format to minutes
-  const timeToMinutes = (time: string): number => {
-    const [hours, minutes] = time.split(":").map(Number);
-    return hours * 60 + minutes;
-  };
-
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
       <h2 className="text-2xl font-semibold mb-6 text-gray-900">

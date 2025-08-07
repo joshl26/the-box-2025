@@ -22,7 +22,6 @@ export default function DropdownMenu({
   options,
   placeholder = "Select an option",
   className = "",
-  selectedOptionProp = "",
 }: DropdownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<DropdownOption | null>(

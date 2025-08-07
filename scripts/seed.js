@@ -12,9 +12,6 @@ const pool = new Pool({
 
 async function seedDatabase() {
   try {
-    // const result = await pool.query("SELECT NOW()");
-    // console.log("Connection test successful:", result.rows[0].now);
-
     await pool.query("DROP TABLE IF EXISTS grows CASCADE");
 
     await pool.query(

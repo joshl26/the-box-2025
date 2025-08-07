@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // app/dashboard/newGrow/page.tsx
 import { createGrow } from "@/app/actions";
 

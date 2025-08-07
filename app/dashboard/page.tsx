@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // app/dashboard/page.tsx
 import { fetchGrows, setActiveGrow } from "../actions";
+import DeleteButton from "../components/DeleteButton";
 
 export default async function DashboardPage() {
   const grows = await fetchGrows();
@@ -50,7 +51,7 @@ function SelectableGrowItem({ grow }: { grow: any }) {
   // boolean check for displaying which grow is selected
   const isActive = grow.currently_selected === "true";
 
-  const handleUpdate = async (formData: FormData) => {
+  const handleSetActive = async (formData: FormData) => {
     "use server";
 
     const result = await setActiveGrow(formData);
@@ -63,70 +64,80 @@ function SelectableGrowItem({ grow }: { grow: any }) {
   };
 
   return (
-    <form action={handleUpdate} className="w-full ">
-      <input type="hidden" name="growId" value={grow.id} />
-      <button
-        type="submit"
-        className={`w-full text-left p-3 border-b border-gray-200 last:border-b-0 transition-all duration-200  hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset ${
-          isActive
-            ? "bg-blue-50 border-l-4 border-l-blue-500 shadow-sm"
-            : "hover:border-l-4 hover:border-l-gray-300"
-        }`}
-      >
-        <div className="flex items-center justify-between ">
-          <div className="flex items-center space-x-3 ">
-            {/* Status indicator dot */}
-            <div
-              className={`w-3 h-3 rounded-full flex-shrink-0 ${
-                isActive ? "bg-blue-500" : "bg-gray-300"
-              }`}
-            ></div>
+    <div className="w-full flex">
+      {/* Main grow selection button */}
+      <form action={handleSetActive} className="flex-1">
+        <input type="hidden" name="growId" value={grow.id} />
+        <button
+          type="submit"
+          className={`w-full text-left p-3 border-b border-gray-200 last:border-b-0 transition-all duration-200  hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset ${
+            isActive
+              ? "bg-blue-50 border-l-4 border-l-blue-500 shadow-sm"
+              : "hover:border-l-4 hover:border-l-gray-300"
+          }`}
+        >
+          <div className="flex items-center justify-between ">
+            <div className="flex items-center space-x-3 ">
+              {/* Status indicator dot */}
+              <div
+                className={`w-3 h-3 rounded-full flex-shrink-0 ${
+                  isActive ? "bg-blue-500" : "bg-gray-300"
+                }`}
+              ></div>
 
-            <div className="min-w-0 flex-1 ">
-              <h3
-                className={`font-medium truncate ${
-                  isActive ? "text-blue-900" : "text-white"
-                }`}
-              >
-                {grow.strain}
-              </h3>
-              <p
-                className={`text-sm mt-1 truncate  ${
-                  isActive ? "text-blue-700" : "text-white"
-                }`}
-              >
-                {grow.grow_notes}
-              </p>
-              {grow.growth_cycle && (
-                <p
-                  className={`text-xs mt-1 capitalize ${
-                    isActive ? "text-blue-600" : "text-white"
+              <div className="min-w-0 flex-1 ">
+                <h3
+                  className={`font-medium truncate ${
+                    isActive ? "text-blue-900" : "text-white"
                   }`}
                 >
-                  Stage: {grow.growth_cycle.replace("_", " ")}
+                  {grow.strain}
+                </h3>
+                <p
+                  className={`text-sm mt-1 truncate  ${
+                    isActive ? "text-blue-700" : "text-white"
+                  }`}
+                >
+                  {grow.grow_notes}
                 </p>
-              )}
+                {grow.growth_cycle && (
+                  <p
+                    className={`text-xs mt-1 capitalize ${
+                      isActive ? "text-blue-600" : "text-white"
+                    }`}
+                  >
+                    Stage: {grow.growth_cycle.replace("_", " ")}
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
 
-          {/* Active indicator */}
-          {isActive && (
-            <div className="flex items-center space-x-2 text-blue-600 flex-shrink-0">
-              <span className="text-xs font-medium bg-blue-100 px-2 py-1 rounded-full">
-                ACTIVE
-              </span>
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-          )}
-        </div>
-      </button>
-    </form>
+            {/* Active indicator */}
+            {isActive && (
+              <div className="flex items-center space-x-2 text-blue-600 flex-shrink-0">
+                <span className="text-xs font-medium bg-blue-100 px-2 py-1 rounded-full">
+                  ACTIVE
+                </span>
+                <svg
+                  className="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            )}
+          </div>
+        </button>
+      </form>
+
+      {/* Delete button - Client Component */}
+      <DeleteButton growId={grow.id} growName={grow.strain} />
+    </div>
   );
 }
 
@@ -196,12 +207,6 @@ function ActiveGrowSummary({ grows }: { grows: any[] }) {
             className="text-xs bg-purple-100 text-purple-700 px-3 py-2 rounded-md hover:bg-purple-200 transition-colors text-center"
           >
             Irrigation
-          </a>
-          <a
-            href="/dashboard/lightingSchedule"
-            className="text-xs bg-yellow-100 text-yellow-700 px-3 py-2 rounded-md hover:bg-yellow-200 transition-colors text-center"
-          >
-            Lighting
           </a>
         </div>
       </div>
