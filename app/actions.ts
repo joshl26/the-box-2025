@@ -46,7 +46,7 @@ export async function updateRecord(
       .map((col, index) => `"${col}" = $${index + 2}`) // $1 for Id, then $2, $3...
       .join(", ");
 
-    console.log("id", id);
+    // console.log("id", id);
 
     const query = `UPDATE ${tableName} SET ${setClause} WHERE "id" = $1 RETURNING *;`;
     const result = await pool.query(query, [id, ...values]);
@@ -252,7 +252,7 @@ export async function updateGrow(formData: FormData) {
     // Handle checkbox - convert to boolean
     const grow_finished = formData.get("grow_finished") === ("true" as string);
 
-    console.log(grow_finished);
+    // console.log(grow_finished);
 
     if (!id) {
       return { success: false, error: "Grow ID is required." };

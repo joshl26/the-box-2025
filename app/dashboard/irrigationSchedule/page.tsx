@@ -73,7 +73,7 @@ export default async function IrrigationSchedule() {
         <div className="flex-col">
           {growthCycle === "veg_growth" && (
             <Image
-              src="/vegetative_growth.png"
+              src="/images/vegetative_growth.png"
               alt=""
               width={500}
               height={100}
@@ -81,7 +81,7 @@ export default async function IrrigationSchedule() {
           )}
           {growthCycle === "gen_flower_start" && (
             <Image
-              src="/generative_flower_start.png"
+              src="/images/generative_flower_start.png"
               alt=""
               width={500}
               height={100}
@@ -89,7 +89,7 @@ export default async function IrrigationSchedule() {
           )}
           {growthCycle === "veg_flower_mid" && (
             <Image
-              src="/vegetative_flower_mid.png"
+              src="/images/vegetative_flower_mid.png"
               alt=""
               width={500}
               height={100}
@@ -97,7 +97,7 @@ export default async function IrrigationSchedule() {
           )}
           {growthCycle === "gen_flower_end" && (
             <Image
-              src="/generative_flower_end.png"
+              src="/images/generative_flower_end.png"
               alt=""
               width={500}
               height={100}

@@ -69,13 +69,15 @@ else
     exit 1
 fi
 
+sudo npm run build
+
 # Delete any existing instance of "the-box-2025" specifically
 echo "Ensuring no existing 'the-box-2025' PM2 processes..."
 pm2 delete "the-box-2025" || :
 
 # Start the new PM2 process
 echo "Starting PM2 process..."
-pm2 start npm --name "the-box-2025" -- start
+
 
 # Setup PM2 startup (only need to run this once, but it's idempotent)
 pm2 startup systemd
