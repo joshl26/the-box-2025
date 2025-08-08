@@ -1,15 +1,27 @@
 // app/dashboard/newGrow/page.tsx
 import { createGrow } from "@/app/actions";
+import { redirect } from "next/navigation";
 
 export default async function NewGrowPage() {
   const handleCreate = async (formData: FormData) => {
-    "use server"; // This Server Action is defined inline
+    "use server";
 
-    const result = await createGrow(formData);
-    if (result.success) {
-      console.log("Record updated successfully!");
-    } else {
-      console.error("Update failed:", result.error);
+    try {
+      const result = await createGrow(formData);
+      if (result && !result.success) {
+        console.error("Create failed:", result.error);
+        // Handle error case - you might want to show an error message here
+        return;
+      }
+      // If we get here and no result, it means createGrow redirected successfully
+      console.log("Grow created successfully and redirected!");
+    } catch (error) {
+      // Handle redirect errors separately from other errors
+      if (error && typeof error === "object" && "digest" in error) {
+        // This is likely a Next.js redirect from createGrow, re-throw it
+        throw error;
+      }
+      console.error("Handle create error:", error);
     }
   };
 
@@ -30,7 +42,7 @@ export default async function NewGrowPage() {
               id="strain"
               name="strain"
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
               placeholder="Enter strain name"
             />
           </div>
@@ -47,7 +59,7 @@ export default async function NewGrowPage() {
               name="grow_notes"
               required
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical text-black"
               placeholder="Enter grow notes"
             />
           </div>

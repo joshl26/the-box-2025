@@ -196,16 +196,22 @@ export async function createGrow(formData: FormData) {
       return { success: false, error: "Strain and grow notes are required." };
     }
 
-    await pool.query(
+    const result = await pool.query(
       'INSERT INTO grows ("strain", "grow_notes") VALUES ($1, $2) RETURNING *',
       [strain, grow_notes]
     );
-    // Revalidate the path first
-    revalidatePath("/dashboard/newGrow");
-    revalidatePath("/dashboard/");
 
-    // Redirect - this throws an exception and doesn't return
-    redirect("/dashboard/");
+    console.log("New grow created:", result.rows[0]);
+
+    // Revalidate all relevant paths
+    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/newGrow");
+    revalidatePath("/dashboard/editGrow");
+    revalidatePath("/dashboard/irrigationSchedule");
+    revalidatePath("/dashboard/lightingSchedule");
+
+    // Redirect to dashboard
+    redirect("/dashboard");
   } catch (error) {
     // Handle redirect errors separately from other errors
     if (error && typeof error === "object" && "digest" in error) {
@@ -217,7 +223,6 @@ export async function createGrow(formData: FormData) {
     return { success: false, error: "Failed to create grow." };
   }
 }
-
 export async function deleteGrow(formData: FormData) {
   try {
     const Id = formData.get("Id") as string;
@@ -235,7 +240,13 @@ export async function deleteGrow(formData: FormData) {
       return { success: false, error: "Grow not found." };
     }
 
+    // Revalidate all relevant paths after deletion
+    revalidatePath("/dashboard");
     revalidatePath("/dashboard/newGrow");
+    revalidatePath("/dashboard/editGrow");
+    revalidatePath("/dashboard/irrigationSchedule");
+    revalidatePath("/dashboard/lightingSchedule");
+
     return { success: true, message: "Grow deleted successfully" };
   } catch (error) {
     console.error("Error deleting grow:", error);
