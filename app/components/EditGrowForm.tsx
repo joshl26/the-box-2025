@@ -1,5 +1,7 @@
 // app/components/EditGrowForm.tsx
 import { updateRecord } from "../actions";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 interface Grow {
   id: number;
@@ -41,60 +43,82 @@ export default function EditGrowForm({ grow }: EditGrowFormProps) {
   const handleUpdate = async (formData: FormData) => {
     "use server";
 
-    const id = formData.get("id") as string;
-    const strain = formData.get("strain") as string;
-    const grow_notes = formData.get("grow_notes") as string;
-    const currently_selected = formData.get("currently_selected") as string;
-    const sunrise_time_veg = formData.get("sunrise_time_veg") as string;
-    const sunset_time_veg = formData.get("sunset_time_veg") as string;
-    const sunrise_time_flower = formData.get("sunrise_time_flower") as string;
-    const sunset_time_flower = formData.get("sunset_time_flower") as string;
-    const number_of_pots = formData.get("number_of_pots") as string;
-    const pot_volume = formData.get("pot_volume") as string;
-    const vegetative_start_date = formData.get(
-      "vegetative_start_date"
-    ) as string;
-    const flower_start_date = formData.get("flower_start_date") as string;
-    const flower_end_date = formData.get("flower_end_date") as string;
-    const breeder_name = formData.get("breeder_name") as string;
-    const grower_name = formData.get("grower_name") as string;
+    try {
+      const id = formData.get("id") as string;
+      const strain = formData.get("strain") as string;
+      const grow_notes = formData.get("grow_notes") as string;
+      const currently_selected = formData.get("currently_selected") as string;
+      const sunrise_time_veg = formData.get("sunrise_time_veg") as string;
+      const sunset_time_veg = formData.get("sunset_time_veg") as string;
+      const sunrise_time_flower = formData.get("sunrise_time_flower") as string;
+      const sunset_time_flower = formData.get("sunset_time_flower") as string;
+      const number_of_pots = formData.get("number_of_pots") as string;
+      const pot_volume = formData.get("pot_volume") as string;
+      const vegetative_start_date = formData.get(
+        "vegetative_start_date"
+      ) as string;
+      const flower_start_date = formData.get("flower_start_date") as string;
+      const flower_end_date = formData.get("flower_end_date") as string;
+      const breeder_name = formData.get("breeder_name") as string;
+      const grower_name = formData.get("grower_name") as string;
 
-    // Fix for checkbox: Get all values and check if checkbox is checked
-    const grow_finished_values = formData.getAll("grow_finished") as string[];
-    const grow_finished = grow_finished_values.includes("true")
-      ? "true"
-      : "false";
+      // Fix for checkbox: Get all values and check if checkbox is checked
+      const grow_finished_values = formData.getAll("grow_finished") as string[];
+      const grow_finished = grow_finished_values.includes("true")
+        ? "true"
+        : "false";
 
-    const dataToUpdate: PartialUpdateData = {};
+      const dataToUpdate: PartialUpdateData = {};
 
-    if (strain) dataToUpdate.strain = strain;
-    if (grow_notes) dataToUpdate.grow_notes = grow_notes;
-    if (currently_selected)
-      dataToUpdate.currently_selected = currently_selected;
-    if (sunrise_time_veg) dataToUpdate.sunrise_time_veg = sunrise_time_veg;
-    if (sunset_time_veg) dataToUpdate.sunset_time_veg = sunset_time_veg;
-    if (sunrise_time_flower)
-      dataToUpdate.sunrise_time_flower = sunrise_time_flower;
-    if (sunset_time_flower)
-      dataToUpdate.sunset_time_flower = sunset_time_flower;
-    if (number_of_pots) dataToUpdate.number_of_pots = parseInt(number_of_pots);
-    if (pot_volume) dataToUpdate.pot_volume = parseFloat(pot_volume);
-    if (vegetative_start_date)
-      dataToUpdate.vegetative_start_date = vegetative_start_date;
-    if (flower_start_date) dataToUpdate.flower_start_date = flower_start_date;
-    if (flower_end_date) dataToUpdate.flower_end_date = flower_end_date;
-    if (breeder_name) dataToUpdate.breeder_name = breeder_name;
-    if (grower_name) dataToUpdate.grower_name = grower_name;
+      if (strain) dataToUpdate.strain = strain;
+      if (grow_notes) dataToUpdate.grow_notes = grow_notes;
+      if (currently_selected)
+        dataToUpdate.currently_selected = currently_selected;
+      if (sunrise_time_veg) dataToUpdate.sunrise_time_veg = sunrise_time_veg;
+      if (sunset_time_veg) dataToUpdate.sunset_time_veg = sunset_time_veg;
+      if (sunrise_time_flower)
+        dataToUpdate.sunrise_time_flower = sunrise_time_flower;
+      if (sunset_time_flower)
+        dataToUpdate.sunset_time_flower = sunset_time_flower;
+      if (number_of_pots)
+        dataToUpdate.number_of_pots = parseInt(number_of_pots);
+      if (pot_volume) dataToUpdate.pot_volume = parseFloat(pot_volume);
+      if (vegetative_start_date)
+        dataToUpdate.vegetative_start_date = vegetative_start_date;
+      if (flower_start_date) dataToUpdate.flower_start_date = flower_start_date;
+      if (flower_end_date) dataToUpdate.flower_end_date = flower_end_date;
+      if (breeder_name) dataToUpdate.breeder_name = breeder_name;
+      if (grower_name) dataToUpdate.grower_name = grower_name;
 
-    // Always include grow_finished (fixed)
-    dataToUpdate.grow_finished = grow_finished;
+      // Always include grow_finished (fixed)
+      dataToUpdate.grow_finished = grow_finished;
 
-    const result = await updateRecord(id, "grows", dataToUpdate);
+      const result = await updateRecord(id, "grows", dataToUpdate);
 
-    if (result.success) {
-      console.log("Record updated successfully:", result.updatedRecord);
-    } else {
-      console.error("Update failed:", result.error);
+      if (result.success) {
+        console.log("Record updated successfully:", result.updatedRecord);
+
+        // Revalidate all relevant paths
+        revalidatePath("/dashboard/editGrow");
+        revalidatePath("/dashboard");
+        revalidatePath("/dashboard/irrigationSchedule");
+        revalidatePath("/dashboard/lightingSchedule");
+
+        // Redirect back to the edit page to show updated data
+        redirect("/dashboard/editGrow");
+      } else {
+        console.error("Update failed:", result.error);
+        throw new Error(result.error || "Failed to update grow");
+      }
+    } catch (error) {
+      // Handle redirect errors separately from other errors
+      if (error && typeof error === "object" && "digest" in error) {
+        // This is likely a Next.js redirect, re-throw it
+        throw error;
+      }
+
+      console.error("Error updating grow:", error);
+      throw new Error("Failed to update grow");
     }
   };
 
