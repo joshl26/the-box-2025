@@ -69,7 +69,11 @@ else
     exit 1
 fi
 
-sudo npm run build
+npm run test_db
+
+npm run seed
+
+npm run build
 
 # Delete any existing instance of "the-box-2025" specifically
 echo "Ensuring no existing 'the-box-2025' PM2 processes..."

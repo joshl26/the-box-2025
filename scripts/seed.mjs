@@ -67,7 +67,7 @@ async function seedDatabase() {
       breeder_name VARCHAR(255),
       grower_name VARCHAR(255),
       currently_selected VARCHAR(255) DEFAULT false,
-      grow_finished BOOLEAN DEFAULT false,
+      grow_finished VARCHAR(255) DEFAULT false,
       growth_cycle VARCHAR(255) DEFAULT 'veg_growth'
     )`
     );
@@ -127,8 +127,8 @@ async function seedDatabase() {
       )
       VALUES
           ('Blue Dream', 'First hydroponic grow attempt. Using DWC system.', '16:00:00', '10:00:00', '16:00:00', '4:00:00', 2, 8390, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '2025-1-1', '2025-1-1', '2025-1-1', '34th St. Seeds', 'Josh','true', 'false', 'veg_growth'),
-          ('Northern Lights', 'Second grow with improved nutrient schedule.', '0:00:00', '0:00:00', '0:00:00', '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '2025-1-1', '2025-1-1', '2025-1-1', 'Saggarita Seed Co.', 'Josh','false', 'false', 'veg_growth'),
-          ('White Widow', 'Experimental grow with LED lighting.', '0:00:00', '0:00:00', '0:00:00', '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '2025-1-1', '2025-1-1', '2025-1-1', 'Dutch Passion Seed Co.', 'Josh','false', 'false', 'veg_growth')`);
+          ('Northern Lights', 'Second grow with improved nutrient schedule.', '0:00:00', '0:00:00', '0:00:00', '0:00:00', 2, 8390, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '2025-1-1', '2025-1-1', '2025-1-1', 'Saggarita Seed Co.', 'Josh','false', 'false', 'veg_growth'),
+          ('White Widow', 'Experimental grow with LED lighting.', '0:00:00', '0:00:00', '0:00:00', '0:00:00', 2, 8390, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '2025-1-1', '2025-1-1', '2025-1-1', 'Dutch Passion Seed Co.', 'Josh','false', 'false', 'veg_growth')`);
   } catch (error) {
     console.error("Error seeding database:", error);
   } finally {
