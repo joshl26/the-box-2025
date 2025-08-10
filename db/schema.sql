@@ -118,3 +118,25 @@ VALUES[
     ('Northern Lights', 'Second grow with improved nutrient schedule.', '0:00:00', '0:00:00', '0:00:00', '0:00:00', 2, 8390, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '2025-1-1', '2025-1-1', '2025-1-1', 'Saggarita Seed Co.', 'Josh','false', 'false', 'veg_growth'),
     ('White Widow', 'Experimental grow with LED lighting.', '0:00:00', '0:00:00', '0:00:00', '0:00:00', 2, 8390, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '0:00:00', 0, 0, '2025-1-1', '2025-1-1', '2025-1-1', 'Dutch Passion Seed Co.', 'Josh','false', 'false', 'veg_growth')
 ];
+
+DROP TABLE IF EXISTS sensor_data CASCADE;
+
+CREATE TABLE sensor_data (
+    time TIMESTAMPTZ NOT NULL,
+    sensor_id INTEGER NOT NULL,
+    value DOUBLE PRECISION,
+    metadata JSONB
+);
+
+CREATE INDEX idx_sensor_data_time ON sensor_data (time DESC);
+CREATE INDEX idx_sensor_data_sensor_id ON sensor_data (sensor_id);
+
+CREATE EXTENSION IF NOT EXISTS timescaledb;
+
+SELECT create_hypertable('sensor_data', 'time');
+
+-- time='2025-8-9 23:41:00'
+--     sensor_id_1 = 101
+--     value = 550.00
+--     metadata={'name': 'John Doe','age': 30, 'isStudent': 'false'}
+--     insert_sensor_data(time, sensor_id_1, value, metadata)

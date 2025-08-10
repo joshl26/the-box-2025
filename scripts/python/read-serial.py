@@ -1,3 +1,4 @@
+import serial
 import time
 
 # Configure the serial port
@@ -10,3 +11,6 @@ while True:
         line = ser.readline().decode('utf-8').rstrip()
         print(f"Received: {line}")
     time.sleep(0.1) # Small delay to prevent busy-waiting
+
+
+#sudo -E python3 save_sensor_data.py
