@@ -79,9 +79,9 @@ npm run build
 echo "Ensuring no existing 'the-box-2025' PM2 processes..."
 pm2 delete "the-box-2025" || :
 
-# Start the new PM2 process
-echo "Starting PM2 process..."
-
+# Start the new PM2 process with network access
+echo "Starting PM2 process with network access..."
+pm2 start npm --name "the-box-2025" -- start
 
 # Setup PM2 startup (only need to run this once, but it's idempotent)
 pm2 startup systemd
