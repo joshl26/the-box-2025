@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#test
-
 # Define the target directory where the repository will be cloned
 TARGET_DIR="/home/josh/the-box-2025"
 
