@@ -354,11 +354,11 @@ export async function fetchSensorData(
 
     query += ` ORDER BY time ASC`;
 
-    console.log(query, params);
+    // console.log(query, params);
 
     const result = await pool.query(query, params);
 
-    console.log(result.rows);
+    // console.log(result.rows);
 
     return {
       success: true,

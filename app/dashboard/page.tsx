@@ -3,6 +3,7 @@
 import { fetchGrows, setActiveGrow } from "../actions";
 import DeleteButton from "../components/DeleteButton";
 import SensorDataGraph from "../components/SensorDataGraph";
+import SerialPumpController from "../components/serial-pump-controller";
 
 export default async function DashboardPage() {
   const grows = await fetchGrows();
@@ -43,6 +44,14 @@ export default async function DashboardPage() {
         {grows.success && grows.fetchGrows && (
           <ActiveGrowSummary grows={grows.fetchGrows} />
         )}
+      </div>
+
+      <div className="min-h-screen bg-gray-100 py-8">
+        <SerialPumpController
+          defaultDuration={45}
+          defaultBaudRate={9600}
+          pin={13}
+        />
       </div>
 
       {/* New Sensor Data Section */}
