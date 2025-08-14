@@ -2,22 +2,24 @@
 // app/dashboard/page.tsx
 import { fetchGrows, setActiveGrow } from "../actions";
 import DeleteButton from "../components/DeleteButton";
+import SensorDataGraph from "../components/SensorDataGraph";
 
 export default async function DashboardPage() {
   const grows = await fetchGrows();
 
   return (
-    <div>
+    <div className="space-y-6">
+      {/* Existing Current Grows Section */}
       <div className="mt-4">
         <div className="mx-auto shadow-md rounded-lg p-4">
           <h2 className="text-xl font-semibold mb-4">Current Grows</h2>
-          <p className="text-sm  mb-3">
+          <p className="text-sm mb-3">
             Click on a grow to make it active • Active grows are highlighted in
             blue
           </p>
 
           {grows.success && grows.fetchGrows && grows.fetchGrows.length > 0 ? (
-            <div className="min-h-100 overflow-y-scroll border border-gray-300 rounded-md ">
+            <div className="min-h-100 overflow-y-scroll border border-gray-300 rounded-md">
               {grows.fetchGrows.map((grow) => (
                 <SelectableGrowItem key={grow.id} grow={grow} />
               ))}
@@ -42,9 +44,76 @@ export default async function DashboardPage() {
           <ActiveGrowSummary grows={grows.fetchGrows} />
         )}
       </div>
+
+      {/* New Sensor Data Section */}
+      <div className="mt-8">
+        <div className="mb-4">
+          <h2 className="text-xl font-semibold">Environmental Monitoring</h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Real-time soil moisture levels and irrigation tracking
+          </p>
+        </div>
+
+        {/* Sensor Graph Component */}
+        <SensorDataGraph
+          sensorId={101}
+          hoursBack={24}
+          refreshInterval={30000}
+          height={400}
+        />
+      </div>
+
+      {/* Additional Sensor Cards for Quick Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <SensorSummaryCard
+          title="Moisture Status"
+          sensorId={101}
+          type="current"
+        />
+        <SensorSummaryCard title="Today's Range" sensorId={101} type="range" />
+        <SensorSummaryCard
+          title="Irrigation Events"
+          sensorId={101}
+          type="events"
+        />
+      </div>
     </div>
   );
 }
+
+// New Sensor Summary Card Component
+async function SensorSummaryCard({
+  title,
+  sensorId,
+  type,
+}: {
+  title: string;
+  sensorId: number;
+  type: "current" | "range" | "events";
+}) {
+  // This would need to be converted to a client component or use API routes
+  // for real-time updates. For now, showing the structure.
+
+  return (
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+      <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+        {title}
+      </h3>
+      <div className="text-2xl font-bold text-gray-900 dark:text-white">
+        {type === "current" && "---"}
+        {type === "range" && "500-600"}
+        {type === "events" && "12"}
+      </div>
+      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+        {type === "current" && "Loading..."}
+        {type === "range" && "Last 24 hours"}
+        {type === "events" && "Today"}
+      </p>
+    </div>
+  );
+}
+
+// Existing components remain the same...
 
 // Selectable grow item component using server actions
 function SelectableGrowItem({ grow }: { grow: any }) {
@@ -70,14 +139,14 @@ function SelectableGrowItem({ grow }: { grow: any }) {
         <input type="hidden" name="growId" value={grow.id} />
         <button
           type="submit"
-          className={`w-full text-left p-3 border-b border-gray-200 last:border-b-0 transition-all duration-200  hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset ${
+          className={`w-full text-left p-3 border-b border-gray-200 last:border-b-0 transition-all duration-200 hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset ${
             isActive
               ? "bg-blue-50 border-l-4 border-l-blue-500 shadow-sm"
               : "hover:border-l-4 hover:border-l-gray-300"
           }`}
         >
-          <div className="flex items-center justify-between ">
-            <div className="flex items-center space-x-3 ">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
               {/* Status indicator dot */}
               <div
                 className={`w-3 h-3 rounded-full flex-shrink-0 ${
@@ -85,7 +154,7 @@ function SelectableGrowItem({ grow }: { grow: any }) {
                 }`}
               ></div>
 
-              <div className="min-w-0 flex-1 ">
+              <div className="min-w-0 flex-1">
                 <h3
                   className={`font-medium truncate ${
                     isActive ? "text-blue-900" : "text-white"
@@ -94,7 +163,7 @@ function SelectableGrowItem({ grow }: { grow: any }) {
                   {grow.strain}
                 </h3>
                 <p
-                  className={`text-sm mt-1 truncate  ${
+                  className={`text-sm mt-1 truncate ${
                     isActive ? "text-blue-700" : "text-white"
                   }`}
                 >

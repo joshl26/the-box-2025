@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // app/actions.ts
 "use server";
 
@@ -326,5 +327,120 @@ export async function setActiveGrow(formData: FormData) {
   } catch (error) {
     console.error("Error setting active grow:", error);
     return { success: false, error: "Failed to set active grow." };
+  }
+}
+
+export async function fetchSensorData(
+  sensorId?: number,
+  hoursBack: number = 24
+) {
+  try {
+    let query = `
+    SELECT 
+      time,
+      sensor_id,
+      value,
+      metadata
+    FROM sensor_data 
+    WHERE time >= NOW() - $1::TEXT::INTERVAL
+  `;
+
+    const params: any[] = [hoursBack + " hours"];
+
+    if (sensorId) {
+      query += ` AND sensor_id = $2`;
+      params.push(sensorId);
+    }
+
+    query += ` ORDER BY time ASC`;
+
+    console.log(query, params);
+
+    const result = await pool.query(query, params);
+
+    console.log(result.rows);
+
+    return {
+      success: true,
+      sensorData: result.rows.map((row) => ({
+        ...row,
+        time: row.time.toISOString(),
+        metadata:
+          typeof row.metadata === "string"
+            ? JSON.parse(row.metadata)
+            : row.metadata,
+      })),
+    };
+  } catch (error) {
+    console.error("Error fetching sensor data:", error);
+    return { success: false, error: "Failed to fetch sensor data." };
+  }
+}
+export async function fetchLatestSensorReading(sensorId: number) {
+  try {
+    const result = await pool.query(
+      `SELECT 
+        time,
+        sensor_id,
+        value,
+        metadata
+      FROM sensor_data 
+      WHERE sensor_id = $1 
+      ORDER BY time DESC 
+      LIMIT 1`,
+      [sensorId]
+    );
+
+    if (result.rows.length === 0) {
+      return { success: false, error: "No sensor data found." };
+    }
+
+    const row = result.rows[0];
+    return {
+      success: true,
+      latestReading: {
+        ...row,
+        time: row.time.toISOString(),
+        metadata:
+          typeof row.metadata === "string"
+            ? JSON.parse(row.metadata)
+            : row.metadata,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching latest sensor reading:", error);
+    return { success: false, error: "Failed to fetch latest sensor reading." };
+  }
+}
+
+export async function fetchSensorStats(
+  sensorId: number,
+  hoursBack: number = 24
+) {
+  try {
+    const result = await pool.query(
+      `SELECT 
+        AVG(value) as avg_value,
+        MIN(value) as min_value,
+        MAX(value) as max_value,
+        COUNT(*) as reading_count
+      FROM sensor_data 
+      WHERE sensor_id = $1 
+        AND time >= NOW() - INTERVAL '${hoursBack} hours'`,
+      [sensorId]
+    );
+
+    return {
+      success: true,
+      stats: {
+        average: parseFloat(result.rows[0].avg_value || 0).toFixed(1),
+        minimum: result.rows[0].min_value || 0,
+        maximum: result.rows[0].max_value || 0,
+        readingCount: parseInt(result.rows[0].reading_count || 0),
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching sensor stats:", error);
+    return { success: false, error: "Failed to fetch sensor stats." };
   }
 }
