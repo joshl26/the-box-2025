@@ -46,7 +46,7 @@ const getErrorMessage = (error: unknown): string => {
 
 const SerialPumpController: React.FC<SerialControllerProps> = ({
   defaultDuration = 30,
-  defaultBaudRate = 9600,
+  defaultBaudRate = 115200,
   pin = 22,
 }) => {
   const [duration, setDuration] = useState<number>(defaultDuration);
