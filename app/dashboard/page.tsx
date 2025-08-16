@@ -49,7 +49,7 @@ export default async function DashboardPage() {
       <div className="min-h-screen bg-gray-100 py-8">
         <SerialPumpController
           defaultDuration={45}
-          defaultBaudRate={9600}
+          defaultBaudRate={115200}
           pin={13}
         />
       </div>
